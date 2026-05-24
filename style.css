@@ -1,5 +1,51 @@
-.support-message {
-  color: #0066ff;
-  font-size: 1.5rem;
-  font-weight: 700;
+body {
+    background-color: #f0f0f0;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+.numbers {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.number {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#generate {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#generate:hover {
+    background-color: #45a049;
 }
