@@ -19,6 +19,7 @@ body {
 }
 
 .lotto-panel,
+.comments-panel,
 .contact-panel {
     background-color: #fff;
     border-radius: 8px;
@@ -116,7 +117,8 @@ form button {
     }
 
     .lotto-panel,
-    .contact-panel {
+    .contact-panel,
+    .comments-panel {
         padding: 22px 16px;
     }
 

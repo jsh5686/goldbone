@@ -32,7 +32,29 @@
                 <button type="submit">문의 보내기</button>
             </form>
         </section>
+        <section class="comments-panel" aria-labelledby="comments-title">
+            <h2 id="comments-title">댓글</h2>
+            <div id="disqus_thread"></div>
+        </section>
     </div>
     <script src="main.js"></script>
+    <script>
+        var disqus_config = function () {
+            this.page.url = window.location.href;
+            this.page.identifier = 'goldbone-home';
+        };
+
+        (function () {
+            var d = document;
+            var s = d.createElement('script');
+            s.src = 'https://goldbone0.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>
+        Please enable JavaScript to view the
+        <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
 </body>
 </html>
