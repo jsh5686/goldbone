@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,30 @@
 </head>
 <body>
     <div class="container">
-        <h1>Lotto Number Generator</h1>
-        <div class="numbers"></div>
-        <button id="generate">Generate Numbers</button>
+        <section class="lotto-panel" aria-labelledby="lotto-title">
+            <h1 id="lotto-title">Lotto Number Generator</h1>
+            <div class="numbers"></div>
+            <button id="generate" type="button">Generate Numbers</button>
+        </section>
+
+        <section class="contact-panel" aria-labelledby="contact-title">
+            <h2 id="contact-title">제휴문의</h2>
+            <form action="https://formspree.io/f/xnjrbqbe" method="POST">
+                <label>
+                    이름
+                    <input type="text" name="name" autocomplete="name" required>
+                </label>
+                <label>
+                    이메일
+                    <input type="email" name="email" autocomplete="email" required>
+                </label>
+                <label>
+                    문의 내용
+                    <textarea name="message" rows="5" required></textarea>
+                </label>
+                <button type="submit">문의 보내기</button>
+            </form>
+        </section>
     </div>
     <script src="main.js"></script>
 </body>
