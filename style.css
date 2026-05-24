@@ -1,1 +1,5 @@
-/* Add styles here */
+.support-message {
+  color: #0066ff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
