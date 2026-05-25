@@ -1,0 +1,17 @@
+{
+  "name": "Civil Work Manager",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
+  "postAttachCommand": "python3 -m http.server 4173 --bind 0.0.0.0",
+  "forwardPorts": [4173],
+  "portsAttributes": {
+    "4173": {
+      "label": "Civil Work Manager",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  }
+}

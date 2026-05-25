@@ -1,15 +1,18 @@
 const DATA_URL = 'civil-work-backup-2026-05-25.json';
 const STORE_KEY = 'civil-workmgr-data-v2';
+const SETTINGS_KEY = 'civil-workmgr-settings-v1';
 const routes = [
   ['/', '대시보드', '▦'], ['/todos', '해야 할 일', '☑'], ['/chatbot', 'AI 어시스턴트', '◇'],
   ['/projects', '공사관리', '□'], ['/complaints', '민원관리', '!'], ['/consultations', '협의관리', '↔'],
   ['/budgets', '예산관리', '₩'], ['/executions', '집행관리', '↧'], ['/schedules', '일정관리', '○'],
-  ['/files', '자료실', '▤'], ['/contacts', '업체/연락처', '☎'], ['/backup', '백업 / 복구', '⇅']
+  ['/files', '자료실', '▤'], ['/contacts', '업체/연락처', '☎'], ['/backup', '백업 / 복구', '⇅'],
+  ['/settings', '설정', '⚙']
 ];
 let data = null;
 let route = location.hash.replace('#', '') || '/';
 let selectedProject = null;
 let currentMonth = new Date(2026, 4, 1);
+let settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{"adminName":"관리자","density":"comfortable","theme":"light"}');
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 const view = $('#view');
@@ -24,6 +27,9 @@ const statusColor = (s) => ['준공', '완료', '회신완료', '지출'].includ
 const projectName = (id) => data.projects.find((p) => p.id === Number(id))?.name || '선택 안함';
 const budgetName = (id) => data.budgets.find((b) => b.id === Number(id))?.name || '선택 안함';
 const arr = (name) => data[name] || (data[name] = []);
+const nullableNumber = (value) => value === '' || value === null || value === undefined || value === 'null' ? null : Number(value);
+function saveSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); applySettings(); }
+function applySettings() { document.body.classList.toggle('compact', settings.density === 'compact'); document.body.classList.toggle('dark', settings.theme === 'dark'); const label = document.querySelector('.brand-copy span'); if (label) label.textContent = settings.adminName || '관리자'; }
 function save() { localStorage.setItem(STORE_KEY, JSON.stringify(data)); renderNav(); }
 function nextId(name) { return Math.max(0, ...arr(name).map((x) => Number(x.id) || 0)) + 1; }
 function removeById(name, id) {
@@ -61,7 +67,7 @@ function renderNav() {
 }
 function render() {
   if (!data) return;
-  const map = { '/': dashboard, '/todos': todos, '/chatbot': chatbot, '/projects': projects, '/complaints': complaints, '/consultations': consultations, '/budgets': budgets, '/executions': executions, '/schedules': schedules, '/files': files, '/contacts': contacts, '/backup': backup };
+  const map = { '/': dashboard, '/todos': todos, '/chatbot': chatbot, '/projects': projects, '/complaints': complaints, '/consultations': consultations, '/budgets': budgets, '/executions': executions, '/schedules': schedules, '/files': files, '/contacts': contacts, '/backup': backup, '/settings': settingsPage };
   (map[route] || (() => view.innerHTML = '<div class="empty">Page Not Found</div>'))();
 }
 function formModal(title, fields, values, onSubmit) {
@@ -87,7 +93,7 @@ function fieldHtml(f, value) {
   const v = value ?? f.default ?? '';
   const req = f.required ? 'required' : '';
   if (f.type === 'textarea') return `<label class="form-field"><span>${f.label}</span><textarea name="${f.name}" rows="${f.rows || 3}" ${req}>${esc(v)}</textarea></label>`;
-  if (f.type === 'select') return `<label class="form-field"><span>${f.label}</span><select name="${f.name}" ${req}>${(f.options || []).map(([val, text]) => `<option value="${esc(val)}" ${String(val) === String(v) ? 'selected' : ''}>${esc(text ?? val)}</option>`).join('')}</select></label>`;
+  if (f.type === 'select') return `<label class="form-field"><span>${f.label}</span><select name="${f.name}" ${req}>${(f.options || []).map(([val, text]) => `<option value="${esc(val ?? '')}" ${String(val ?? '') === String(v ?? '') ? 'selected' : ''}>${esc(text ?? val)}</option>`).join('')}</select></label>`;
   if (f.type === 'checkbox') return `<label class="form-check"><input type="checkbox" name="${f.name}" ${v ? 'checked' : ''}> ${f.label}</label>`;
   if (f.type === 'file') return `<label class="form-field"><span>${f.label}</span><input name="${f.name}" type="file" ${req}></label>`;
   return `<label class="form-field"><span>${f.label}</span><input name="${f.name}" type="${f.type || 'text'}" value="${esc(v)}" ${req}></label>`;
@@ -121,7 +127,7 @@ function projectFields(v = {}) { return [
 ]; }
 function editProject(id) {
   const old = id ? arr('projects').find((x) => x.id === id) : { id: nextId('projects'), actualProgress: 0, status: '진행중', startDate: today(), endDate: today(), displayOrder: arr('projects').length + 1 };
-  formModal(id ? '공사 수정' : '공사 등록', projectFields(old), old, (out) => { out.budgetId = out.budgetId ? Number(out.budgetId) : null; if (id) Object.assign(old, out, { updatedAt: new Date().toISOString() }); else arr('projects').push({ ...out, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }); selectedProject = out.id; });
+  formModal(id ? '공사 수정' : '공사 등록', projectFields(old), old, (out) => { out.budgetId = nullableNumber(out.budgetId); if (id) Object.assign(old, out, { updatedAt: new Date().toISOString() }); else arr('projects').push({ ...out, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }); selectedProject = out.id; });
 }
 function projects() {
   selectedProject = selectedProject || arr('projects')[0]?.id;
@@ -156,10 +162,10 @@ function renderProjectDetail() {
 }
 function editCompany(id, projectId) { const old = id ? arr('projectCompanies').find((x) => x.id === id) : { id: nextId('projectCompanies'), projectId, type: '시공사' }; formModal(id ? '업체 수정' : '업체 추가', [{ name: 'type', label: '구분' }, { name: 'name', label: '업체명 *', required: true }, { name: 'manager', label: '담당자' }, { name: 'phone', label: '연락처' }, { name: 'email', label: '이메일' }], old, (out) => id ? Object.assign(old, out) : arr('projectCompanies').push({ ...out, createdAt: new Date().toISOString() })); }
 function editMemo(id, projectId) { const old = id ? arr('projectMemos').find((x) => x.id === id) : { id: nextId('projectMemos'), projectId, content: '' }; formModal(id ? '메모 수정' : '메모 추가', [{ name: 'content', label: '메모', type: 'textarea', rows: 5, required: true }], old, (out) => id ? Object.assign(old, out) : arr('projectMemos').push({ ...out, createdAt: new Date().toISOString() })); }
-function addLink(projectId) { formModal('연계할 공사 선택', [{ name: 'linkedProjectId', label: '공사', type: 'select', options: arr('projects').filter((p) => p.id !== projectId).map((p) => [p.id, p.name]) }], {}, (out) => arr('linkedProjects').push({ id: nextId('linkedProjects'), projectId, linkedProjectId: Number(out.linkedProjectId), isRepresentative: false })); }
+function addLink(projectId) { const options = arr('projects').filter((p) => p.id !== projectId).map((p) => [p.id, p.name]); if (!options.length) return alert('연계할 수 있는 공사가 없습니다.'); formModal('연계할 공사 선택', [{ name: 'linkedProjectId', label: '공사', type: 'select', options }], {}, (out) => arr('linkedProjects').push({ id: nextId('linkedProjects'), projectId, linkedProjectId: Number(out.linkedProjectId), isRepresentative: false })); }
 function simpleTable({ type, title, addText, placeholder, heads, fields, row, formFields, defaults = {} }) {
   view.innerHTML = `<div class="narrow">${pageHead(title, '', `<button class="btn" id="add-row">${addText}</button>`)}<div class="toolbar"><div class="search"><input id="q" placeholder="${placeholder}"></div></div><div class="table-card"><table class="table"><thead><tr>${heads.map((h) => `<th>${h}</th>`).join('')}<th>관리</th></tr></thead><tbody id="tbody"></tbody></table></div></div>`;
-  const edit = (id) => { const old = id ? arr(type).find((x) => x.id === id) : { id: nextId(type), ...defaults }; formModal(id ? `${title.replace('관리', '')} 수정` : addText, formFields(), old, (out) => { if (out.projectId !== undefined) out.projectId = out.projectId ? Number(out.projectId) : null; if (out.budgetId !== undefined) out.budgetId = out.budgetId ? Number(out.budgetId) : null; if (id) Object.assign(old, out, { updatedAt: new Date().toISOString() }); else arr(type).push({ ...out, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }); }); };
+  const edit = (id) => { const old = id ? arr(type).find((x) => x.id === id) : { id: nextId(type), ...defaults }; formModal(id ? `${title.replace('관리', '')} 수정` : addText, formFields(), old, (out) => { if (out.projectId !== undefined) out.projectId = nullableNumber(out.projectId); if (out.budgetId !== undefined) out.budgetId = nullableNumber(out.budgetId); if (id) Object.assign(old, out, { updatedAt: new Date().toISOString() }); else arr(type).push({ ...out, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }); }); };
   const draw = (q = '') => { $('#tbody').innerHTML = arr(type).filter((x) => fields.some((f) => String(x[f] || '').toLowerCase().includes(q.toLowerCase()))).map((x) => `<tr>${row(x).map((c) => `<td>${c}</td>`).join('')}<td>${rowActions(type, x.id)}</td></tr>`).join('') || `<tr><td colspan="${heads.length + 1}" class="muted">등록된 항목이 없습니다</td></tr>`; bindCrud(type, edit); };
   $('#add-row').onclick = () => edit(); $('#q').oninput = (e) => draw(e.target.value); draw();
 }
@@ -177,7 +183,7 @@ function schedules() {
   const y = currentMonth.getFullYear(), m = currentMonth.getMonth(); const first = new Date(y, m, 1).getDay(), days = new Date(y, m + 1, 0).getDate(); let cells = []; for (let i = 0; i < first; i++) cells.push(''); for (let d = 1; d <= days; d++) cells.push(d); while (cells.length % 7) cells.push('');
   view.innerHTML = `<div class="narrow">${pageHead('일정관리', '', '<button id="add-schedule" class="btn">일정 등록</button>')}<div class="toolbar"><button id="prev-month" class="btn outline">‹</button><h2>${y}년 ${m + 1}월</h2><button id="next-month" class="btn outline">›</button><button id="this-month" class="btn ghost">오늘</button></div><div class="calendar"><div class="cal-head">${['일', '월', '화', '수', '목', '금', '토'].map((x) => `<div>${x}</div>`).join('')}</div><div class="cal-row">${cells.map((d) => { const ev = d ? arr('schedules').filter((s) => new Date(s.date || s.startDate).getMonth() === m && new Date(s.date || s.startDate).getDate() === d && new Date(s.date || s.startDate).getFullYear() === y) : []; return `<div class="day">${d ? `<div class="day-num">${d}</div>${ev.map((e) => `<button class="event" data-schedule="${e.id}">${esc(e.title)}</button>`).join('')}` : ''}</div>`; }).join('')}</div></div><div class="section table-card"><table class="table"><thead><tr><th>일자</th><th>유형</th><th>일정 제목</th><th>장소</th><th>관리</th></tr></thead><tbody>${arr('schedules').filter((x) => new Date(x.date || x.startDate).getFullYear() === y && new Date(x.date || x.startDate).getMonth() === m).map((x) => `<tr><td>${date(x.date || x.startDate)}</td><td>${esc(x.type || '')}</td><td>${esc(x.title)}</td><td>${esc(x.location || '')}</td><td>${rowActions('schedules', x.id)}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">이번 달 등록된 일정이 없습니다</td></tr>'}</tbody></table></div></div>`;
   const editSchedule = (id) => { const old = id ? arr('schedules').find((x) => x.id === id) : { id: nextId('schedules'), date: today(), startDate: today(), endDate: today(), color: 'blue', type: '회의' }; formModal(id ? '일정 수정' : '일정 등록', [{ name: 'type', label: '유형' }, { name: 'color', label: '색상' }, { name: 'title', label: '일정 제목 *', required: true }, { name: 'date', label: '날짜', type: 'date' }, { name: 'startTime', label: '시작시간', type: 'time' }, { name: 'endTime', label: '종료시간', type: 'time' }, { name: 'location', label: '장소' }, { name: 'projectId', label: '관련 공사', type: 'select', options: projectOptions() }, { name: 'memo', label: '메모', type: 'textarea' }], old, (out) => { out.startDate = out.date; out.endDate = out.date; id ? Object.assign(old, out) : arr('schedules').push(out); }); };
-  $('#add-schedule').onclick = () => editSchedule(); $('#prev-month').onclick = () => { currentMonth = new Date(y, m - 1, 1); render(); }; $('#next-month').onclick = () => { currentMonth = new Date(y, m + 1, 1); render(); }; $('#this-month').onclick = () => { currentMonth = new Date(); render(); }; $('[data-schedule]').forEach((b) => b.onclick = () => editSchedule(Number(b.dataset.schedule))); bindCrud('schedules', editSchedule);
+  $('#add-schedule').onclick = () => editSchedule(); $('#prev-month').onclick = () => { currentMonth = new Date(y, m - 1, 1); render(); }; $('#next-month').onclick = () => { currentMonth = new Date(y, m + 1, 1); render(); }; $('#this-month').onclick = () => { currentMonth = new Date(); render(); }; $$('[data-schedule]').forEach((b) => b.onclick = () => editSchedule(Number(b.dataset.schedule))); bindCrud('schedules', editSchedule);
 }
 function todos() {
   view.innerHTML = `<div class="narrow">${pageHead('해야 할 일', '', '<button id="add-card" class="btn">카드 추가</button>')}<div class="todo-board">${arr('todoCards').map((card) => `<article class="civil-card todo-card"><div class="item-top"><h3>${esc(card.title)}</h3><div>${rowActions('todoCards', card.id)}</div></div><button class="btn outline" data-add-section="${card.id}">섹션 추가</button>${arr('todoSections').filter((s) => s.cardId === card.id).map((sec) => `<section class="todo-section"><div class="item-top"><strong>${esc(sec.title)}</strong><div>${rowActions('todoSections', sec.id)}</div></div><button class="link-btn" data-add-item="${sec.id}">할 일 추가</button>${arr('todoItems').filter((i) => i.sectionId === sec.id).map((i) => `<div class="todo-item ${i.done ? 'done' : ''}"><button class="box" data-toggle-item="${i.id}">${i.done ? '✓' : ''}</button><span>${esc(i.content)}</span><span>${rowActions('todoItems', i.id)}</span></div>`).join('')}</section>`).join('')}</article>`).join('') || '<div class="empty">등록된 카드가 없습니다.</div>'}</div></div>`;
@@ -188,7 +194,7 @@ function todos() {
 }
 function files() {
   view.innerHTML = `<div class="narrow">${pageHead('자료실', `총 ${arr('files').length}개 파일`, '<button id="add-file" class="btn">파일 업로드</button>')}<div class="cards">${arr('files').map((f) => `<article class="civil-card"><h3>${esc(f.file?.name || f.fileName || f.name)}</h3><p class="mini">${esc(f.category || '기타')} · ${projectName(f.projectId)}<br>${esc(f.description || '')}<br>${date(f.createdAt || f.uploadedAt)}</p><button class="link-btn" data-download-file="${f.id}">다운로드</button> ${rowActions('files', f.id)}</article>`).join('') || '<div class="empty civil-card">파일이 없습니다.</div>'}</div></div>`;
-  const editFile = (id) => { const old = id ? arr('files').find((x) => x.id === id) : { id: nextId('files'), category: '기타', projectId: null }; formModal(id ? '파일 수정' : '파일 업로드', [{ name: 'file', label: '파일 선택', type: 'file', required: !id }, { name: 'category', label: '분류' }, { name: 'projectId', label: '관련 공사', type: 'select', options: projectOptions() }, { name: 'description', label: '설명', type: 'textarea' }], old, (out) => { out.projectId = out.projectId ? Number(out.projectId) : null; out.fileName = out.file?.name || old.fileName; out.size = out.file?.size || old.size; id ? Object.assign(old, out) : arr('files').push({ ...out, createdAt: new Date().toISOString() }); }); };
+  const editFile = (id) => { const old = id ? arr('files').find((x) => x.id === id) : { id: nextId('files'), category: '기타', projectId: null }; formModal(id ? '파일 수정' : '파일 업로드', [{ name: 'file', label: '파일 선택', type: 'file', required: !id }, { name: 'category', label: '분류' }, { name: 'projectId', label: '관련 공사', type: 'select', options: projectOptions() }, { name: 'description', label: '설명', type: 'textarea' }], old, (out) => { out.projectId = nullableNumber(out.projectId); out.fileName = out.file?.name || old.fileName; out.size = out.file?.size || old.size; id ? Object.assign(old, out) : arr('files').push({ ...out, createdAt: new Date().toISOString() }); }); };
   $('#add-file').onclick = () => editFile(); bindCrud('files', editFile); $$('[data-download-file]').forEach((b) => b.onclick = () => downloadFile(Number(b.dataset.downloadFile)));
 }
 function downloadFile(id) { const f = arr('files').find((x) => x.id === id); if (!f?.file?.dataUrl) return alert('저장된 파일 데이터가 없습니다.'); const a = document.createElement('a'); a.href = f.file.dataUrl; a.download = f.file.name || f.fileName || 'download'; a.click(); }
@@ -204,6 +210,15 @@ function backup() {
   $('#import').onclick = () => $('#import-file').click(); $('#import-file').onchange = async (e) => { const file = e.target.files[0]; if (!file || !confirm('현재 데이터를 덮어씁니다. 계속하시겠습니까?')) return; data = JSON.parse(await file.text()); save(); renderNav(); render(); };
   $('#reset').onclick = async () => { if (!confirm('원본 백업으로 초기화할까요?')) return; localStorage.removeItem(STORE_KEY); data = await fetch(DATA_URL).then((r) => r.json()); save(); renderNav(); render(); };
 }
-async function init() { try { const stored = localStorage.getItem(STORE_KEY); data = stored ? JSON.parse(stored) : await fetch(DATA_URL).then((r) => r.json()); save(); renderNav(); render(); } catch (e) { view.innerHTML = '<div class="empty">로딩 중 오류가 발생했습니다.</div>'; console.error(e); } }
+
+function settingsPage() {
+  const storageSize = new Blob([JSON.stringify(data)]).size;
+  view.innerHTML = `<div class="backup-card">${pageHead('설정', '화면 표시와 로컬 저장 데이터를 관리합니다.')}<div class="civil-card section"><h3>사용자 설정</h3><div class="settings-grid"><label class="form-field"><span>표시 이름</span><input id="setting-name" value="${esc(settings.adminName || '관리자')}"></label><label class="form-field"><span>화면 밀도</span><select id="setting-density"><option value="comfortable" ${settings.density !== 'compact' ? 'selected' : ''}>기본</option><option value="compact" ${settings.density === 'compact' ? 'selected' : ''}>촘촘하게</option></select></label><label class="form-field"><span>테마</span><select id="setting-theme"><option value="light" ${settings.theme !== 'dark' ? 'selected' : ''}>밝게</option><option value="dark" ${settings.theme === 'dark' ? 'selected' : ''}>어둡게</option></select></label></div><button id="save-settings" class="btn">설정 저장</button></div><div class="civil-card section"><h3>저장소 상태</h3><p class="mini">브라우저 로컬 저장소 사용량: ${Math.round(storageSize / 1024)}KB<br>프로젝트 ${arr('projects').length}건, 민원 ${arr('complaints').length}건, 협의 ${arr('consultations').length}건, 일정 ${arr('schedules').length}건</p><button id="settings-export" class="btn outline">현재 데이터 백업</button> <button id="settings-reset" class="btn danger">원본 백업으로 초기화</button></div></div>`;
+  $('#save-settings').onclick = () => { settings = { adminName: $('#setting-name').value.trim() || '관리자', density: $('#setting-density').value, theme: $('#setting-theme').value }; saveSettings(); renderNav(); render(); };
+  $('#settings-export').onclick = () => { const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `civil-work-backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href); };
+  $('#settings-reset').onclick = async () => { if (!confirm('원본 백업으로 초기화할까요?')) return; localStorage.removeItem(STORE_KEY); data = await fetch(DATA_URL).then((r) => r.json()); save(); renderNav(); render(); };
+}
+
+async function init() { try { const stored = localStorage.getItem(STORE_KEY); data = stored ? JSON.parse(stored) : await fetch(DATA_URL).then((r) => r.json()); applySettings(); save(); renderNav(); render(); } catch (e) { view.innerHTML = '<div class="empty">로딩 중 오류가 발생했습니다.</div>'; console.error(e); } }
 window.addEventListener('hashchange', () => { route = location.hash.replace('#', '') || '/'; renderNav(); render(); });
 init();
