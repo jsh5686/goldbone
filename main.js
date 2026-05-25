@@ -1,115 +1,86 @@
 const DATA_URL = 'civil-work-backup-2026-05-25.json';
-const STORE_KEY = 'civil-workmgr-data-v2';
-const SETTINGS_KEY = 'civil-workmgr-settings-v1';
-const routes = [
-  ['/', '대시보드', '▦'], ['/todos', '해야 할 일', '☑'], ['/chatbot', 'AI 어시스턴트', '◇'],
-  ['/projects', '공사관리', '□'], ['/complaints', '민원관리', '!'], ['/consultations', '협의관리', '↔'],
-  ['/budgets', '예산관리', '₩'], ['/executions', '집행관리', '↧'], ['/schedules', '일정관리', '○'],
-  ['/files', '자료실', '▤'], ['/contacts', '업체/연락처', '☎'], ['/backup', '백업 / 복구', '⇅'],
-  ['/settings', '설정', '⚙']
-];
-let data = null;
-let route = location.hash.replace('#', '') || '/';
-let selectedProject = null;
-let currentMonth = new Date(2026, 4, 1);
-let settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{"adminName":"관리자","density":"comfortable","theme":"light"}');
-const $ = (s, root = document) => root.querySelector(s);
-const $$ = (s, root = document) => [...root.querySelectorAll(s)];
-const view = $('#view');
-const esc = (v) => String(v ?? '').replace(/[&<>"]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
-const money = (n) => new Intl.NumberFormat('ko-KR').format(Number(n || 0)) + '원';
-const date = (v) => { if (!v) return '-'; const d = new Date(v); return Number.isNaN(d.getTime()) ? v : new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium' }).format(d); };
-const iso = (v) => v ? String(v).slice(0, 10) : '';
-const today = () => new Date().toISOString().slice(0, 10);
-const pct = (n) => Math.max(0, Math.min(100, Number(n || 0)));
-const pill = (t, c = 'gray') => `<span class="pill ${c}">${esc(t || '-')}</span>`;
-const statusColor = (s) => ['준공', '완료', '회신완료', '지출'].includes(s) ? 'green' : ['진행중', '접수', '검토중'].includes(s) ? 'orange' : ['처리중'].includes(s) ? 'blue' : 'gray';
-const projectName = (id) => data.projects.find((p) => p.id === Number(id))?.name || '선택 안함';
-const budgetName = (id) => data.budgets.find((b) => b.id === Number(id))?.name || '선택 안함';
-const arr = (name) => data[name] || (data[name] = []);
-const nullableNumber = (value) => value === '' || value === null || value === undefined || value === 'null' ? null : Number(value);
-const dayMs = 24 * 60 * 60 * 1000;
-const dateValue = (v) => { const d = new Date(iso(v)); return Number.isNaN(d.getTime()) ? null : d; };
-const daysFromToday = (v) => { const d = dateValue(v); if (!d) return null; const now = dateValue(today()); return Math.round((d - now) / dayMs); };
-const shortMoney = (n) => {
-  const v = Number(n || 0);
-  if (Math.abs(v) >= 100000000) return `${Math.round(v / 10000000) / 10}억`;
-  if (Math.abs(v) >= 10000) return `${Math.round(v / 1000) / 10}만`;
-  return new Intl.NumberFormat('ko-KR').format(v);
-};
-const projectLink = (id) => Number(id) ? `<button class="inline-route" data-project="${Number(id)}">${esc(projectName(id))}</button>` : '<span class="muted">-</span>';
-function saveSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); applySettings(); }
-function applySettings() { document.body.classList.toggle('compact', settings.density === 'compact'); document.body.classList.toggle('dark', settings.theme === 'dark'); const label = document.querySelector('.brand-copy span'); if (label) label.textContent = settings.adminName || '관리자'; }
-function save() { localStorage.setItem(STORE_KEY, JSON.stringify(data)); renderNav(); }
-function nextId(name) { return Math.max(0, ...arr(name).map((x) => Number(x.id) || 0)) + 1; }
-function removeById(name, id) {
-  id = Number(id);
-  if (name === 'projects') {
-    data.projectCompanies = arr('projectCompanies').filter((x) => x.projectId !== id);
-    data.projectMemos = arr('projectMemos').filter((x) => x.projectId !== id);
-    data.linkedProjects = arr('linkedProjects').filter((x) => x.projectId !== id && x.linkedProjectId !== id);
-    data.files = arr('files').filter((x) => x.projectId !== id);
+function todos() {
+  // Kanban-style todo view: columns = sections, quick inline add, persistent filters
+  const cards = arr('todoCards').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  const sections = arr('todoSections').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  const items = arr('todoItems').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+
+  view.innerHTML = `<div class="workplace-shell task-list-shell">
+    <section class="workplace-hero">
+      <div>
+        <p class="workspace-kicker">Operations Workspace</p>
+        <h1>해야 할 일</h1>
+        <p>칸반형 보기로 분류별 업무를 빠르게 확인하고 추가할 수 있습니다. (단축키: N = 빠른 추가)</p>
+      </div>
+      <div class="hero-actions">
+        <button id="add-card" class="btn secondary">업무 묶음 추가</button>
+        <button id="add-section" class="btn outline light-action">분류 추가</button>
+        <button id="reset-filters" class="btn">필터 초기화</button>
+      </div>
+    </section>
+
+    <section class="todo-commandbar">
+      <div class="search enterprise-search"><input id="todo-query" placeholder="할 일 내용, 묶음, 분류로 검색"></div>
+      <select id="todo-group" class="control-select"><option value="all">전체 묶음</option>${cards.map((card) => `<option value="${card.id}">${esc(card.title)}</option>`).join('')}</select>
+      <div class="segmented" id="todo-filter">
+        <button class="active" data-state="all">전체</button>
+        <button data-state="open">진행중</button>
+        <button data-state="done">완료</button>
+      </div>
+    </section>
+
+    <section class="kanban" id="kanban-board">
+      ${sections.length ? sections.map((s) => `<div class="kanban-column" data-section="${s.id}"><div class="column-head"><strong>${esc(s.title)}</strong><small>${esc(cards.find(c=>c.id===s.cardId)?.title||'묶음 없음')}</small></div><div class="column-body" id="col-${s.id}"></div><div class="column-footer"><button class="btn outline inline-add" data-add-item="${s.id}">+ 할 일 추가</button></div></div>`).join('') : `<div class="empty-state">분류가 없습니다. 분류를 추가해 주세요.</div>`}
+    </section>
+  </div>`;
+
+  const editCard = (id) => { const old = id ? arr('todoCards').find((x) => x.id === id) : { id: nextId('todoCards'), title: '', displayOrder: arr('todoCards').length + 1 }; formModal(id ? '업무 묶음 수정' : '업무 묶음 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoCards').push({ ...out, createdAt: new Date().toISOString() })); };
+  const editSection = (id, cardId) => { const old = id ? arr('todoSections').find((x) => x.id === id) : { id: nextId('todoSections'), cardId, title: '', displayOrder: 0 }; formModal(id ? '분류 수정' : '분류 추가', [{ name: 'cardId', label: '업무 묶음', type: 'select', options: cards.map((card) => [card.id, card.title]) }, { name: 'title', label: '제목 *', required: true }], old, (out) => { out.cardId = Number(out.cardId); id ? Object.assign(old, out) : arr('todoSections').push({ ...out, createdAt: new Date().toISOString() }); }); };
+  const editItem = (id, sectionId) => { const old = id ? arr('todoItems').find((x) => x.id === id) : { id: nextId('todoItems'), sectionId, content: '', done: false, displayOrder: arr('todoItems').filter((item) => item.sectionId === sectionId).length + 1 }; formModal(id ? '할 일 수정' : '할 일 추가', [{ name: 'sectionId', label: '분류', type: 'select', options: arr('todoSections').map((section) => { const card = cards.find((entry) => entry.id === section.cardId); return [section.id, `${card?.title || '묶음 없음'} / ${section.title}`]; }) }, { name: 'content', label: '내용 *', required: true }, { name: 'done', label: '완료', type: 'checkbox' }], old, (out) => { out.sectionId = Number(out.sectionId); id ? Object.assign(old, out) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() }); }); };
+
+  function renderKanban() {
+    const q = $('#todo-query').value.trim().toLowerCase();
+    const state = $('#todo-filter .active').dataset.state;
+    const group = $('#todo-group').value;
+    const pool = arr('todoItems');
+    sections.forEach((s) => {
+      const container = $(`#col-${s.id}`);
+      if (!container) return;
+      const rows = pool.filter((item) => item.sectionId === s.id)
+        .filter((it) => state === 'all' || (state === 'open' ? !it.done : it.done))
+        .filter((it) => group === 'all' || String((arr('todoSections').find(sec=>sec.id===it.sectionId)||{}).cardId) === group)
+        .filter((it) => !q || `${it.content}`.toLowerCase().includes(q));
+      container.innerHTML = rows.map((item) => `<div class="kanban-card ${item.done ? 'is-done' : ''}" data-item="${item.id}"><button class="task-check" data-toggle-item="${item.id}">${item.done ? '✓' : ''}</button><div class="card-body"><strong>${esc(item.content)}</strong><div class="card-meta">${esc(arr('todoSections').find(sec=>sec.id===item.sectionId)?.title||'분류 없음')}</div></div><div class="card-actions">${rowActions('todoItems', item.id)}</div></div>`).join('') || `<div class="empty-state mini">등록된 할 일이 없습니다.</div>`;
+    });
+    bindKanbanActions();
   }
-  if (name === 'budgets') {
-    data.budgetParts = arr('budgetParts').filter((x) => x.budgetId !== id);
-    data.executions = arr('executions').filter((x) => x.budgetId !== id);
+
+  function bindKanbanActions() {
+    // toggle done
+    $$('[data-toggle-item]').forEach((b) => b.onclick = () => {
+      const item = arr('todoItems').find((x) => x.id === Number(b.dataset.toggleItem));
+      if (!item) return; item.done = !item.done; save(); renderKanban();
+    });
+    // inline add
+    $$('[data-add-item]').forEach((b) => b.onclick = () => editItem(null, Number(b.dataset.addItem)));
+    // row edit/delete
+    bindCrud('todoItems', (id) => editItem(id));
+    // refresh after modals
+    bindRouteLinks(view);
   }
-  if (name === 'todoCards') {
-    const sectionIds = arr('todoSections').filter((x) => x.cardId === id).map((x) => x.id);
-    data.todoSections = arr('todoSections').filter((x) => x.cardId !== id);
-    data.todoItems = arr('todoItems').filter((x) => !sectionIds.includes(x.sectionId));
-  }
-  if (name === 'todoSections') data.todoItems = arr('todoItems').filter((x) => x.sectionId !== id);
-  data[name] = arr(name).filter((x) => x.id !== id);
-  save(); render();
+
+  $('#add-card').onclick = () => editCard();
+  $('#add-section').onclick = () => editSection();
+  $('#reset-filters').onclick = () => { $('#todo-query').value = ''; $('#todo-group').value = 'all'; $$('#todo-filter button').forEach((b) => b.classList.remove('active')); $$('#todo-filter button')[0].classList.add('active'); renderKanban(); };
+  $('#todo-query').oninput = renderKanban;
+  $('#todo-group').onchange = renderKanban;
+  $$('#todo-filter button').forEach((button) => button.onclick = () => { $$('#todo-filter button').forEach((item) => item.classList.remove('active')); button.classList.add('active'); renderKanban(); });
+
+  // keyboard shortcut: N for quick add (focus search or quick add modal)
+  window.onkeydown = (e) => { if (e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey) { e.preventDefault(); const firstSection = arr('todoSections')[0]; if (firstSection) editItem(null, firstSection.id); else editSection(); } };
+
+  renderKanban();
 }
-function pageHead(title, sub = '', button = '') { return `<div class="page-head"><div class="page-title"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ''}</div><div class="head-actions">${button}</div></div>`; }
-function setRoute(next) { route = next; location.hash = next; renderNav(); render(); }
-function goProject(id) { selectedProject = Number(id); setRoute('/projects'); }
-function bindRouteLinks(root = document) {
-  $$('[data-go]', root).forEach((b) => b.onclick = () => setRoute(b.dataset.go));
-  $$('[data-project]', root).forEach((b) => b.onclick = () => goProject(b.dataset.project));
-}
-function renderNav() {
-  const dueComplaints = arr('complaints').filter((x) => x.processStatus !== '완료').length;
-  const dueConsult = arr('consultations').filter((x) => x.status !== '회신완료').length;
-  $('#nav').innerHTML = routes.map(([path, label, icon]) => {
-    const active = path === '/' ? route === '/' : route.startsWith(path);
-    const count = path === '/complaints' ? dueComplaints : path === '/consultations' ? dueConsult : 0;
-    return `<button class="nav-btn ${active ? 'active' : ''}" data-path="${path}"><span class="nav-ico">${icon}</span><span class="nav-label">${label}</span>${count ? `<span class="badge">${count}</span>` : ''}</button>`;
-  }).join('');
-  $$('.nav-btn').forEach((b) => b.onclick = () => setRoute(b.dataset.path));
-}
-function render() {
-  if (!data) return;
-  const map = { '/': dashboard, '/todos': todos, '/chatbot': chatbot, '/projects': projects, '/complaints': complaints, '/consultations': consultations, '/budgets': budgets, '/executions': executions, '/schedules': schedules, '/files': files, '/contacts': contacts, '/backup': backup, '/settings': settingsPage };
-  (map[route] || (() => view.innerHTML = '<div class="empty">Page Not Found</div>'))();
-}
-function formModal(title, fields, values, onSubmit) {
-  const wrap = document.createElement('div');
-  wrap.className = 'modal-backdrop';
-  wrap.innerHTML = `<form class="modal"><div class="modal-head"><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-close>✕</button></div><div class="modal-body">${fields.map((f) => fieldHtml(f, values[f.name])).join('')}</div><div class="modal-actions"><button type="button" class="btn outline" data-close>취소</button><button class="btn">저장</button></div></form>`;
-  document.body.appendChild(wrap);
-  $$('[data-close]', wrap).forEach((b) => b.onclick = () => wrap.remove());
-  $('form', wrap).onsubmit = async (e) => {
-    e.preventDefault();
-    const out = { ...values };
-    for (const f of fields) {
-      const el = `[name="${f.name}"]`;
-      if (f.type === 'checkbox') out[f.name] = $(el, wrap).checked;
-      else if (f.type === 'file') out[f.name] = await readFile($(el, wrap).files[0], values[f.name]);
-      else if (f.type === 'number') out[f.name] = Number($(el, wrap).value || 0);
-      else out[f.name] = $(el, wrap).value;
-    }
-    onSubmit(out); save(); wrap.remove(); render();
-  };
-}
-function fieldHtml(f, value) {
-  const v = value ?? f.default ?? '';
-  const req = f.required ? 'required' : '';
-  if (f.type === 'textarea') return `<label class="form-field"><span>${f.label}</span><textarea name="${f.name}" rows="${f.rows || 3}" ${req}>${esc(v)}</textarea></label>`;
-  if (f.type === 'select') return `<label class="form-field"><span>${f.label}</span><select name="${f.name}" ${req}>${(f.options || []).map(([val, text]) => `<option value="${esc(val ?? '')}" ${String(val ?? '') === String(v ?? '') ? 'selected' : ''}>${esc(text ?? val)}</option>`).join('')}</select></label>`;
-  if (f.type === 'checkbox') return `<label class="form-check"><input type="checkbox" name="${f.name}" ${v ? 'checked' : ''}> ${f.label}</label>`;
   if (f.type === 'file') return `<label class="form-field"><span>${f.label}</span><input name="${f.name}" type="file" ${req}></label>`;
   return `<label class="form-field"><span>${f.label}</span><input name="${f.name}" type="${f.type || 'text'}" value="${esc(v)}" ${req}></label>`;
 }
@@ -143,9 +114,58 @@ function dashboard() {
   }).sort((a, b) => b.rate - a.rate);
   const riskCount = dueItems.filter((x) => x.remain <= 0).length + delayedProjects.length + budgetRows.filter((b) => b.rate >= 90).length;
   const dueLabel = (n) => n < 0 ? `${Math.abs(n)}일 지연` : n === 0 ? '오늘 마감' : `D-${n}`;
-  view.innerHTML = `<div class="dashboard-wrap">${pageHead('대시보드', new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }), '<button id="print" class="btn">PDF 다운로드</button>')}<div class="grid stats"><button class="civil-card stat danger-stat" data-go="/complaints"><div class="stat-label">주의 필요</div><strong>${riskCount}</strong><p>지연·마감·예산 위험</p></button><button class="civil-card stat" data-go="/projects"><div class="stat-label">진행중 공사</div><strong>${active}</strong><p>지연 ${delayedProjects.length}건 포함</p></button><button class="civil-card stat" data-go="/todos"><div class="stat-label">미완료 할 일</div><strong>${undone}</strong><p>처리 대기 업무</p></button><button class="civil-card stat" data-go="/executions"><div class="stat-label">집행률</div><strong>${totalBudget ? Math.round(executed / totalBudget * 100) : 0}%</strong><p>${shortMoney(executed)} / ${shortMoney(totalBudget)}원</p></button></div><div class="grid dashboard-grid"><section class="civil-card dashboard-panel priority-panel"><div class="panel-head"><h3>우선 처리</h3><button class="link-btn" data-go="/complaints">민원 보기</button></div>${dueItems.length ? dueItems.slice(0, 7).map((x) => `<button class="work-row ${x.remain <= 0 ? 'hot' : ''}" data-go="${x.route}"><span class="work-kind">${x.kind}</span><span class="work-title">${esc(x.title)}</span><span class="work-meta">${dueLabel(x.remain)} · ${esc(x.status || '-')}</span></button>`).join('') : '<p class="mini strong-empty">7일 이내 마감 민원·협의가 없습니다.</p>'}</section><section class="civil-card dashboard-panel"><div class="panel-head"><h3>공사 위험</h3><button class="link-btn" data-go="/projects">공사 보기</button></div>${delayedProjects.length ? delayedProjects.slice(0, 5).map((p) => `<button class="work-row hot" data-project="${p.id}"><span class="work-kind">지연</span><span class="work-title">${esc(p.name)}</span><span class="work-meta">${date(p.endDate)} · 공정률 ${p.actualProgress || 0}%</span></button>`).join('') : '<p class="mini strong-empty">준공일이 지난 진행중 공사가 없습니다.</p>'}</section><section class="civil-card dashboard-panel"><div class="panel-head"><h3>이번 주 일정</h3><button class="link-btn" data-go="/schedules">일정 보기</button></div>${upcomingSchedules.length ? upcomingSchedules.map((s) => `<button class="work-row" data-go="/schedules"><span class="work-kind">${dueLabel(s.remain)}</span><span class="work-title">${esc(s.title)}</span><span class="work-meta">${date(s.date || s.startDate)} · ${esc(s.location || '-')}</span></button>`).join('') : '<p class="mini strong-empty">이번 주 등록된 일정이 없습니다.</p>'}</section><section class="civil-card dashboard-panel"><div class="panel-head"><h3>예산 집행</h3><button class="link-btn" data-go="/budgets">예산 보기</button></div>${budgetRows.length ? budgetRows.slice(0, 6).map((b) => `<div class="budget-row"><div class="budget-top"><strong>${esc(b.name)}</strong><span class="${b.rate >= 100 ? 'rate danger' : b.rate >= 90 ? 'rate warn' : 'rate'}">${b.rate}%</span></div><div class="progress"><span style="width:${pct(b.rate)}%"></span></div><p class="mini">잔액 ${money(b.left)} · 집행 ${money(b.used)}</p></div>`).join('') : '<p class="mini strong-empty">등록된 예산이 없습니다.</p>'}</section></div></div>`;
+  const budgetRate = totalBudget ? Math.round(executed / totalBudget * 100) : 0;
+  const projectTotal = arr('projects').length;
+  const projectRate = projectTotal ? Math.round(active / projectTotal * 100) : 0;
+  const todoTotal = arr('todoItems').length;
+  const todoDone = arr('todoItems').filter((t) => t.done).length;
+  const todoRate = todoTotal ? Math.round(todoDone / todoTotal * 100) : 0;
+  const riskRate = Math.min(100, riskCount * 18);
+  const summary = riskCount ? `${riskCount}건의 주의 항목을 먼저 확인하세요.` : '긴급 위험 없이 안정적으로 관리 중입니다.';
+  view.innerHTML = `<div class="dashboard-wrap refreshed-dashboard">
+    <section class="dashboard-hero">
+      <div>
+        <p class="workspace-kicker">Civil Operations</p>
+        <h1>오늘의 업무 현황</h1>
+        <p>${new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })} · ${summary}</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn secondary" data-go="/tips">사용팁</button>
+        <button class="btn outline light-action" data-go="/schedules">일정 보기</button>
+        <button id="print" class="btn">PDF 다운로드</button>
+      </div>
+    </section>
+    <section class="quick-actions">
+      <button data-go="/projects"><span>공사</span><strong>진행 현장 확인</strong></button>
+      <button data-go="/complaints"><span>민원</span><strong>미처리 ${openComplaints.length}건</strong></button>
+      <button data-go="/consultations"><span>협의</span><strong>회신 대기 ${openConsultations.length}건</strong></button>
+      <button data-go="/backup"><span>데이터</span><strong>백업/복구</strong></button>
+    </section>
+    <section class="gauge-grid">
+      ${gaugeCard('주의 필요', riskRate, riskCount, '지연·마감·예산 위험', '/complaints', 'danger')}
+      ${gaugeCard('공사 가동률', projectRate, `${active}/${projectTotal}`, `지연 ${delayedProjects.length}건 포함`, '/projects', 'blue')}
+      ${gaugeCard('할 일 완료율', todoRate, `${todoRate}%`, `미완료 ${undone}건`, '/todos', 'green')}
+      ${gaugeCard('예산 집행률', budgetRate, `${budgetRate}%`, `${shortMoney(executed)} / ${shortMoney(totalBudget)}원`, '/executions', budgetRate >= 90 ? 'warning' : 'navy')}
+    </section>
+    <div class="grid dashboard-grid">
+      <section class="civil-card dashboard-panel priority-panel"><div class="panel-head"><h3>우선 처리</h3><button class="link-btn" data-go="/complaints">민원 보기</button></div>${dueItems.length ? dueItems.slice(0, 7).map((x) => `<button class="work-row ${x.remain <= 0 ? 'hot' : ''}" data-go="${x.route}"><span class="work-kind">${x.kind}</span><span class="work-title">${esc(x.title)}</span><span class="work-meta">${dueLabel(x.remain)} · ${esc(x.status || '-')}</span></button>`).join('') : '<p class="mini strong-empty">7일 이내 마감 민원·협의가 없습니다.</p>'}</section>
+      <section class="civil-card dashboard-panel"><div class="panel-head"><h3>공사 위험</h3><button class="link-btn" data-go="/projects">공사 보기</button></div>${delayedProjects.length ? delayedProjects.slice(0, 5).map((p) => `<button class="work-row hot" data-project="${p.id}"><span class="work-kind">지연</span><span class="work-title">${esc(p.name)}</span><span class="work-meta">${date(p.endDate)} · 공정률 ${p.actualProgress || 0}%</span></button>`).join('') : '<p class="mini strong-empty">준공일이 지난 진행중 공사가 없습니다.</p>'}</section>
+      <section class="civil-card dashboard-panel"><div class="panel-head"><h3>이번 주 일정</h3><button class="link-btn" data-go="/schedules">일정 보기</button></div>${upcomingSchedules.length ? upcomingSchedules.map((s) => `<button class="work-row" data-go="/schedules"><span class="work-kind">${dueLabel(s.remain)}</span><span class="work-title">${esc(s.title)}</span><span class="work-meta">${date(s.date || s.startDate)} · ${esc(s.location || '-')}</span></button>`).join('') : '<p class="mini strong-empty">이번 주 등록된 일정이 없습니다.</p>'}</section>
+      <section class="civil-card dashboard-panel"><div class="panel-head"><h3>예산 집행</h3><button class="link-btn" data-go="/budgets">예산 보기</button></div>${budgetRows.length ? budgetRows.slice(0, 6).map((b) => `<div class="budget-row"><div class="budget-top"><strong>${esc(b.name)}</strong><span class="${b.rate >= 100 ? 'rate danger' : b.rate >= 90 ? 'rate warn' : 'rate'}">${b.rate}%</span></div><div class="progress"><span style="width:${pct(b.rate)}%"></span></div><p class="mini">잔액 ${money(b.left)} · 집행 ${money(b.used)}</p></div>`).join('') : '<p class="mini strong-empty">등록된 예산이 없습니다.</p>'}</section>
+    </div>
+  </div>`;
   bindRouteLinks(view);
   $('#print').onclick = () => window.print();
+}
+function gaugeCard(label, value, main, sub, target, tone = 'blue') {
+  const safe = pct(value);
+  return `<button class="gauge-card ${tone}" data-go="${target}" style="--value:${safe}%">
+    <span class="gauge-label">${esc(label)}</span>
+    <span class="gauge">
+      <span class="gauge-center"><strong>${esc(main)}</strong><small>${safe}%</small></span>
+    </span>
+    <span class="gauge-sub">${esc(sub)}</span>
+  </button>`;
 }
 function projectFields(v = {}) { return [
   { name: 'workKind', label: '업무 구분', type: 'select', options: ['공사', '용역'].map((x) => [x, x]), default: '공사' },
@@ -161,16 +181,42 @@ function editProject(id) {
 }
 function projects() {
   selectedProject = selectedProject || arr('projects')[0]?.id;
-  const cats = ['전체', ...new Set(arr('projects').map((p) => p.status).filter(Boolean))];
-  view.innerHTML = `<div class="split"><aside class="list-pane"><div class="list-head"><div class="list-title"><h2>공사관리</h2><button id="add-project" class="btn">등록</button></div><div class="search"><input id="q" placeholder="공사명 검색..."></div><div class="filters">${cats.map((c, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-filter="${esc(c)}">${esc(c)}</button>`).join('')}</div></div><div class="items" id="project-list"></div></aside><section class="detail-pane" id="project-detail"></section></div>`;
-  const renderList = (filter = '전체', q = '') => {
-    const rows = arr('projects').filter((p) => (filter === '전체' || p.status === filter) && `${p.name} ${p.location} ${p.contractor}`.toLowerCase().includes(q.toLowerCase())).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-    $('#project-list').innerHTML = rows.map((p) => `<button class="list-item ${p.id === selectedProject ? 'active' : ''}" data-id="${p.id}"><div class="item-top"><div class="item-name">${esc(p.name)}</div>${pill(p.status, statusColor(p.status))}</div><div class="muted">${esc(p.location || '-')} · ${esc(p.contractor || '-')}</div><div class="progress"><span style="width:${pct(p.actualProgress)}%"></span></div></button>`).join('') || '<div class="empty">등록된 공사가 없습니다</div>';
-    $$('.list-item').forEach((b) => b.onclick = () => { selectedProject = Number(b.dataset.id); renderList(filter, $('#q').value); renderProjectDetail(); });
+  const statuses = ['전체', ...new Set(arr('projects').map((p) => p.status).filter(Boolean))];
+  const categories = ['전체', ...new Set(arr('projects').map((p) => p.category || p.workKind).filter(Boolean))];
+  const active = arr('projects').filter((p) => p.status === '진행중').length;
+  const delayed = arr('projects').filter((p) => p.status === '진행중' && daysFromToday(p.endDate) !== null && daysFromToday(p.endDate) < 0).length;
+  view.innerHTML = `<div class="split project-organizer"><aside class="list-pane project-list-pane"><div class="list-head project-head"><div class="list-title"><h2>공사관리</h2><button id="add-project" class="btn">등록</button></div><div class="project-summary"><article><span>전체</span><strong>${arr('projects').length}</strong></article><article><span>진행중</span><strong>${active}</strong></article><article><span>지연</span><strong>${delayed}</strong></article></div><div class="search"><input id="q" placeholder="공사명, 위치, 시공사 검색"></div><div class="project-controls"><select id="project-sort"><option value="order">기본순</option><option value="endDate">준공일 빠른순</option><option value="progress">공정률 낮은순</option><option value="cost">공사비 높은순</option><option value="name">공사명순</option></select><button id="risk-only" class="chip" type="button">지연만</button></div><div class="filters status-filters">${statuses.map((c, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-status="${esc(c)}">${esc(c)}</button>`).join('')}</div><div class="filters category-filters">${categories.map((c, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-category="${esc(c)}">${esc(c)}</button>`).join('')}</div></div><div class="items organized-items" id="project-list"></div></aside><section class="detail-pane" id="project-detail"></section></div>`;
+  const renderList = () => {
+    const status = $('.status-filters .chip.active')?.dataset.status || '전체';
+    const category = $('.category-filters .chip.active')?.dataset.category || '전체';
+    const q = $('#q').value.trim().toLowerCase();
+    const sort = $('#project-sort').value;
+    const riskOnly = $('#risk-only').classList.contains('active');
+    const rows = arr('projects')
+      .filter((p) => status === '전체' || p.status === status)
+      .filter((p) => category === '전체' || (p.category || p.workKind) === category)
+      .filter((p) => !riskOnly || (p.status === '진행중' && daysFromToday(p.endDate) !== null && daysFromToday(p.endDate) < 0))
+      .filter((p) => `${p.name} ${p.location} ${p.contractor} ${p.category} ${p.workKind}`.toLowerCase().includes(q))
+      .sort((a, b) => {
+        if (sort === 'endDate') return (dateValue(a.endDate)?.getTime() || Infinity) - (dateValue(b.endDate)?.getTime() || Infinity);
+        if (sort === 'progress') return Number(a.actualProgress || 0) - Number(b.actualProgress || 0);
+        if (sort === 'cost') return Number(b.projectCost || 0) - Number(a.projectCost || 0);
+        if (sort === 'name') return String(a.name || '').localeCompare(String(b.name || ''), 'ko');
+        return (a.displayOrder || 0) - (b.displayOrder || 0);
+      });
+    $('#project-list').innerHTML = rows.map((p) => {
+      const remain = daysFromToday(p.endDate);
+      const due = remain === null ? '기한 없음' : remain < 0 ? `${Math.abs(remain)}일 지연` : remain === 0 ? '오늘 준공' : `D-${remain}`;
+      return `<button class="list-item project-list-item ${p.id === selectedProject ? 'active' : ''} ${remain !== null && remain < 0 && p.status === '진행중' ? 'is-risk' : ''}" data-id="${p.id}"><div class="item-top"><div class="item-name">${esc(p.name)}</div>${pill(p.status, statusColor(p.status))}</div><div class="project-list-meta"><span>${esc(p.category || p.workKind || '분류 없음')}</span><span>${esc(p.location || '-')}</span><span>${due}</span></div><div class="project-progress-row"><div class="progress"><span style="width:${pct(p.actualProgress)}%"></span></div><strong>${pct(p.actualProgress)}%</strong></div></button>`;
+    }).join('') || '<div class="empty-state">조건에 맞는 공사가 없습니다.</div>';
+    $$('.list-item').forEach((b) => b.onclick = () => { selectedProject = Number(b.dataset.id); renderList(); renderProjectDetail(); });
   };
   $('#add-project').onclick = () => editProject();
-  $('#q').oninput = (e) => renderList($('.chip.active').dataset.filter, e.target.value);
-  $$('.chip').forEach((c) => c.onclick = () => { $$('.chip').forEach((x) => x.classList.remove('active')); c.classList.add('active'); renderList(c.dataset.filter, $('#q').value); });
+  $('#q').oninput = renderList;
+  $('#project-sort').onchange = renderList;
+  $('#risk-only').onclick = () => { $('#risk-only').classList.toggle('active'); renderList(); };
+  $$('.status-filters .chip').forEach((c) => c.onclick = () => { $$('.status-filters .chip').forEach((x) => x.classList.remove('active')); c.classList.add('active'); renderList(); });
+  $$('.category-filters .chip').forEach((c) => c.onclick = () => { $$('.category-filters .chip').forEach((x) => x.classList.remove('active')); c.classList.add('active'); renderList(); });
   renderList(); renderProjectDetail();
 }
 function renderProjectDetail() {
@@ -223,77 +269,83 @@ function todos() {
   const openItems = items.filter((item) => !item.done);
   const doneItems = items.filter((item) => item.done);
   const completion = items.length ? Math.round(doneItems.length / items.length * 100) : 0;
-  const recentOpen = openItems.slice(0, 6);
-  view.innerHTML = `<div class="workplace-shell">
+  view.innerHTML = `<div class="workplace-shell task-list-shell">
     <section class="workplace-hero">
       <div>
         <p class="workspace-kicker">Operations Workspace</p>
         <h1>해야 할 일</h1>
-        <p>카드와 섹션을 유지하면서 오늘 처리할 항목을 빠르게 찾고 완료 상태를 관리합니다.</p>
+        <p>업무를 목록, 상태, 분류 기준으로 빠르게 정리합니다.</p>
       </div>
       <div class="hero-actions">
-        <button id="add-card" class="btn secondary">카드 추가</button>
+        <button id="add-card" class="btn secondary">업무 묶음 추가</button>
+        <button id="add-section" class="btn outline light-action">분류 추가</button>
         <button id="quick-item" class="btn">빠른 할 일 추가</button>
       </div>
     </section>
     <section class="workspace-metrics">
-      <article><span>전체 업무</span><strong>${items.length}</strong><small>${cards.length}개 카드</small></article>
+      <article><span>전체 업무</span><strong>${items.length}</strong><small>${cards.length}개 묶음</small></article>
       <article><span>진행중</span><strong>${openItems.length}</strong><small>완료 전 항목</small></article>
       <article><span>완료</span><strong>${doneItems.length}</strong><small>${completion}% 처리</small></article>
-      <article><span>섹션</span><strong>${sections.length}</strong><small>업무 흐름 단위</small></article>
+      <article><span>분류</span><strong>${sections.length}</strong><small>업무 정리 단위</small></article>
     </section>
     <section class="todo-commandbar">
-      <div class="search enterprise-search"><input id="todo-query" placeholder="할 일, 섹션, 카드명 검색"></div>
+      <div class="search enterprise-search"><input id="todo-query" placeholder="할 일, 분류, 업무 묶음 검색"></div>
+      <select id="todo-group" class="control-select"><option value="all">전체 묶음</option>${cards.map((card) => `<option value="${card.id}">${esc(card.title)}</option>`).join('')}</select>
       <div class="segmented" id="todo-filter">
         <button class="active" data-state="all">전체</button>
         <button data-state="open">진행중</button>
         <button data-state="done">완료</button>
       </div>
     </section>
-    <section class="focus-strip">
-      <div class="focus-head"><span>지금 볼 항목</span><strong>${recentOpen.length ? '진행중 업무' : '대기 업무 없음'}</strong></div>
-      <div class="focus-list">${recentOpen.map((item) => todoFocusItem(item)).join('') || '<p class="muted">모든 할 일이 완료되었습니다.</p>'}</div>
+    <section class="task-layout">
+      <aside class="task-groups" id="task-groups"></aside>
+      <section class="task-table-card">
+        <div class="table-card"><table class="table task-table"><thead><tr><th>상태</th><th>업무</th><th>묶음 / 분류</th><th>관리</th></tr></thead><tbody id="todo-list"></tbody></table></div>
+      </section>
     </section>
-    <section id="todo-board" class="enterprise-board"></section>
   </div>`;
 
   const editCard = (id) => {
     const old = id ? arr('todoCards').find((x) => x.id === id) : { id: nextId('todoCards'), title: '', displayOrder: arr('todoCards').length + 1 };
-    formModal(id ? '카드 수정' : '카드 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoCards').push({ ...out, createdAt: new Date().toISOString() }));
+    formModal(id ? '업무 묶음 수정' : '업무 묶음 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoCards').push({ ...out, createdAt: new Date().toISOString() }));
   };
   const editSection = (id, cardId) => {
     const old = id ? arr('todoSections').find((x) => x.id === id) : { id: nextId('todoSections'), cardId, title: '', displayOrder: 0 };
-    formModal(id ? '섹션 수정' : '섹션 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoSections').push({ ...out, createdAt: new Date().toISOString() }));
+    formModal(id ? '분류 수정' : '분류 추가', [{ name: 'cardId', label: '업무 묶음', type: 'select', options: cards.map((card) => [card.id, card.title]) }, { name: 'title', label: '제목 *', required: true }], old, (out) => { out.cardId = Number(out.cardId); id ? Object.assign(old, out) : arr('todoSections').push({ ...out, createdAt: new Date().toISOString() }); });
   };
   const editItem = (id, sectionId) => {
     const old = id ? arr('todoItems').find((x) => x.id === id) : { id: nextId('todoItems'), sectionId, content: '', done: false, displayOrder: arr('todoItems').filter((item) => item.sectionId === sectionId).length + 1 };
-    formModal(id ? '할 일 수정' : '할 일 추가', [{ name: 'content', label: '내용 *', required: true }, { name: 'done', label: '완료', type: 'checkbox' }], old, (out) => id ? Object.assign(old, out) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() }));
+    formModal(id ? '할 일 수정' : '할 일 추가', [{ name: 'sectionId', label: '분류', type: 'select', options: sections.map((section) => { const card = cards.find((entry) => entry.id === section.cardId); return [section.id, `${card?.title || '묶음 없음'} / ${section.title}`]; }) }, { name: 'content', label: '내용 *', required: true }, { name: 'done', label: '완료', type: 'checkbox' }], old, (out) => { out.sectionId = Number(out.sectionId); id ? Object.assign(old, out) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() }); });
+  };
+  const addSection = () => {
+    const card = cards[0];
+    if (!card) return alert('먼저 업무 묶음을 추가하세요.');
+    editSection(null, card.id);
   };
   const quickItem = () => {
     const firstSection = arr('todoSections')[0];
-    if (!firstSection) return alert('먼저 섹션을 추가하세요.');
+    if (!firstSection) return alert('먼저 분류를 추가하세요.');
     editItem(null, firstSection.id);
   };
-  const drawBoard = () => {
+  const drawList = () => {
     const query = $('#todo-query').value.trim().toLowerCase();
     const state = $('#todo-filter .active').dataset.state;
-    $('#todo-board').innerHTML = cards.map((card) => {
-      const cardSections = sections.filter((section) => section.cardId === card.id).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-      const renderedSections = cardSections.map((section) => {
-        const sectionItems = items.filter((item) => item.sectionId === section.id)
-          .filter((item) => state === 'all' || (state === 'open' ? !item.done : item.done))
-          .filter((item) => !query || `${card.title} ${section.title} ${item.content}`.toLowerCase().includes(query));
-        if (!sectionItems.length && query) return '';
-        const doneCount = sectionItems.filter((item) => item.done).length;
-        return `<article class="workstream">
-          <header><div><span>${esc(card.title)}</span><h3>${esc(section.title)}</h3></div><div class="stream-actions"><small>${doneCount}/${sectionItems.length}</small><button class="link-btn" data-add-section="${card.id}">섹션</button>${rowActions('todoSections', section.id)}${rowActions('todoCards', card.id)}</div></header>
-          <div class="work-items">${sectionItems.map((item) => todoCardItem(item)).join('') || '<p class="muted">표시할 항목이 없습니다.</p>'}</div>
-          <button class="add-inline" data-add-item="${section.id}">+ 할 일 추가</button>
-        </article>`;
-      }).join('');
-      if (!renderedSections.trim() && query) return '';
-      return renderedSections || `<article class="workstream empty-stream"><header><div><span>${esc(card.title)}</span><h3>섹션 없음</h3></div><div class="stream-actions">${rowActions('todoCards', card.id)}</div></header><button class="add-inline" data-add-section="${card.id}">+ 섹션 추가</button></article>`;
-    }).join('') || '<div class="empty-state">검색 결과가 없습니다.</div>';
+    const group = $('#todo-group').value;
+    const rows = items.map((item) => {
+      const section = sections.find((entry) => entry.id === item.sectionId);
+      const card = section ? cards.find((entry) => entry.id === section.cardId) : null;
+      return { item, section, card };
+    }).filter(({ item, section, card }) => state === 'all' || (state === 'open' ? !item.done : item.done))
+      .filter(({ section }) => group === 'all' || String(section?.cardId) === group)
+      .filter(({ item, section, card }) => !query || `${item.content} ${section?.title || ''} ${card?.title || ''}`.toLowerCase().includes(query));
+    $('#todo-list').innerHTML = rows.map(({ item, section, card }) => todoListRow(item, section, card)).join('') || '<tr><td colspan="4" class="muted">조건에 맞는 할 일이 없습니다.</td></tr>';
+    $('#task-groups').innerHTML = sections.map((section) => {
+      const card = cards.find((entry) => entry.id === section.cardId);
+      const sectionItems = items.filter((item) => item.sectionId === section.id);
+      const done = sectionItems.filter((item) => item.done).length;
+      const rate = sectionItems.length ? Math.round(done / sectionItems.length * 100) : 0;
+      return `<article class="task-group-row"><div><span>${esc(card?.title || '묶음 없음')}</span><strong>${esc(section.title)}</strong></div><small>${done}/${sectionItems.length}</small><div class="progress"><span style="width:${rate}%"></span></div><div class="stream-actions"><button class="link-btn" data-add-item="${section.id}">할 일</button>${rowActions('todoSections', section.id)}</div></article>`;
+    }).join('') || '<div class="empty-state">분류가 없습니다.</div>';
     bindTodoActions(editCard, editSection, editItem);
   };
   const bindTodoActions = (editCardFn, editSectionFn, editItemFn) => {
@@ -310,19 +362,21 @@ function todos() {
     });
   };
   $('#add-card').onclick = () => editCard();
+  $('#add-section').onclick = addSection;
   $('#quick-item').onclick = quickItem;
-  $('#todo-query').oninput = drawBoard;
+  $('#todo-query').oninput = drawList;
+  $('#todo-group').onchange = drawList;
   $$('#todo-filter button').forEach((button) => button.onclick = () => {
     $$('#todo-filter button').forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
-    drawBoard();
+    drawList();
   });
-  drawBoard();
+  drawList();
 }
 function todoFocusItem(item) {
   const section = arr('todoSections').find((entry) => entry.id === item.sectionId);
   const card = section ? arr('todoCards').find((entry) => entry.id === section.cardId) : null;
-  return `<button class="focus-item" data-toggle-item="${item.id}"><span></span><div><strong>${esc(item.content)}</strong><small>${esc(card?.title || '카드 없음')} · ${esc(section?.title || '섹션 없음')}</small></div></button>`;
+  return `<button class="focus-item" data-toggle-item="${item.id}"><span></span><div><strong>${esc(item.content)}</strong><small>${esc(card?.title || '묶음 없음')} · ${esc(section?.title || '분류 없음')}</small></div></button>`;
 }
 function todoCardItem(item) {
   const section = arr('todoSections').find((entry) => entry.id === item.sectionId);
@@ -331,6 +385,14 @@ function todoCardItem(item) {
     <div class="task-copy"><strong>${esc(item.content)}</strong><small>${esc(section?.title || '')}</small></div>
     <div class="task-actions">${rowActions('todoItems', item.id)}</div>
   </div>`;
+}
+function todoListRow(item, section, card) {
+  return `<tr class="${item.done ? 'task-row-done' : ''}">
+    <td><button class="task-check list-check" data-toggle-item="${item.id}">${item.done ? '✓' : ''}</button></td>
+    <td><strong>${esc(item.content)}</strong></td>
+    <td><span class="task-path">${esc(card?.title || '묶음 없음')} / ${esc(section?.title || '분류 없음')}</span></td>
+    <td>${rowActions('todoItems', item.id)}</td>
+  </tr>`;
 }
 function files() {
   view.innerHTML = `<div class="narrow">${pageHead('자료실', `총 ${arr('files').length}개 파일`, '<button id="add-file" class="btn">파일 업로드</button>')}<div class="cards">${arr('files').map((f) => `<article class="civil-card"><h3>${esc(f.file?.name || f.fileName || f.name)}</h3><p class="mini">${esc(f.category || '기타')} · ${projectLink(f.projectId)}<br>${esc(f.description || '')}<br>${date(f.createdAt || f.uploadedAt)}</p><button class="link-btn" data-download-file="${f.id}">다운로드</button> ${rowActions('files', f.id)}</article>`).join('') || '<div class="empty civil-card">파일이 없습니다.</div>'}</div></div>`;
@@ -349,6 +411,63 @@ function backup() {
   $('#export').onclick = () => { const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `civil-work-backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href); };
   $('#import').onclick = () => $('#import-file').click(); $('#import-file').onchange = async (e) => { const file = e.target.files[0]; if (!file || !confirm('현재 데이터를 덮어씁니다. 계속하시겠습니까?')) return; data = JSON.parse(await file.text()); save(); renderNav(); render(); };
   $('#reset').onclick = async () => { if (!confirm('원본 백업으로 초기화할까요?')) return; localStorage.removeItem(STORE_KEY); data = await fetch(DATA_URL).then((r) => r.json()); save(); renderNav(); render(); };
+}
+
+function tipsPage() {
+  const panels = {
+    start: {
+      title: '빠른 시작',
+      items: ['대시보드의 게이지를 눌러 위험 항목, 공사, 할 일, 예산 화면으로 바로 이동합니다.', '먼저 민원·협의의 처리기한을 입력하면 우선 처리 목록이 자동으로 정렬됩니다.', '자주 확인하는 공사는 공사관리 목록에서 검색어로 바로 좁혀 보세요.']
+    },
+    projects: {
+      title: '공사관리',
+      items: ['공정률과 준공일을 함께 관리하면 대시보드에서 지연 공사를 자동으로 표시합니다.', '공사 상세에서 업체, 메모, 연계 공사, 자료를 한 화면에 묶어 현장별 이력을 유지합니다.', '예산을 연결해두면 집행관리와 함께 잔액 흐름을 추적하기 쉽습니다.']
+    },
+    civil: {
+      title: '민원·협의',
+      items: ['처리상태를 완료 또는 회신완료로 바꾸면 사이드바 알림 수가 줄어듭니다.', '처리기한이 7일 이내이면 대시보드 우선 처리 영역에 자동 노출됩니다.', '관련 공사를 선택해두면 민원·협의 이력을 공사 맥락에서 다시 찾을 수 있습니다.']
+    },
+    data: {
+      title: '자료·백업',
+      items: ['자료실에 파일을 올릴 때 관련 공사를 지정하면 상세 화면에서도 바로 확인할 수 있습니다.', '큰 수정 전에는 백업 / 복구 화면에서 JSON 백업 파일을 내려받아 보관하세요.', '설정에서 화면 밀도를 촘촘하게 바꾸면 표 중심 업무를 더 빠르게 훑을 수 있습니다.']
+    }
+  };
+  const drawPanel = (key) => {
+    const panel = panels[key] || panels.start;
+    $('#tips-panel').innerHTML = `<section class="tip-panel active">
+      <div class="tip-panel-head"><span>Guide</span><h2>${panel.title}</h2></div>
+      <div class="tip-list">${panel.items.map((item, i) => `<article class="tip-card"><strong>${String(i + 1).padStart(2, '0')}</strong><p>${esc(item)}</p></article>`).join('')}</div>
+    </section>`;
+  };
+  view.innerHTML = `<div class="tips-shell">
+    <section class="tips-hero">
+      <div>
+        <p class="workspace-kicker">Workflow Guide</p>
+        <h1>사용팁</h1>
+        <p>업무 흐름별로 필요한 화면을 빠르게 찾고, 데이터가 대시보드에 잘 반영되도록 입력하는 요령입니다.</p>
+      </div>
+      <button class="btn outline light-action" data-go="/">대시보드로 이동</button>
+    </section>
+    <div class="tips-tabs" id="tips-tabs">
+      <button class="active" data-tip="start">빠른 시작</button>
+      <button data-tip="projects">공사관리</button>
+      <button data-tip="civil">민원·협의</button>
+      <button data-tip="data">자료·백업</button>
+    </div>
+    <div id="tips-panel"></div>
+    <section class="shortcut-grid">
+      <button data-go="/projects"><span>공사 등록</span><strong>현장 정보부터 정리</strong></button>
+      <button data-go="/todos"><span>해야 할 일</span><strong>오늘 업무 체크</strong></button>
+      <button data-go="/budgets"><span>예산관리</span><strong>집행률 확인</strong></button>
+    </section>
+  </div>`;
+  drawPanel('start');
+  $$('#tips-tabs button').forEach((button) => button.onclick = () => {
+    $$('#tips-tabs button').forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    drawPanel(button.dataset.tip);
+  });
+  bindRouteLinks(view);
 }
 
 function settingsPage() {
