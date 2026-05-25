@@ -186,11 +186,120 @@ function schedules() {
   $('#add-schedule').onclick = () => editSchedule(); $('#prev-month').onclick = () => { currentMonth = new Date(y, m - 1, 1); render(); }; $('#next-month').onclick = () => { currentMonth = new Date(y, m + 1, 1); render(); }; $('#this-month').onclick = () => { currentMonth = new Date(); render(); }; $$('[data-schedule]').forEach((b) => b.onclick = () => editSchedule(Number(b.dataset.schedule))); bindCrud('schedules', editSchedule);
 }
 function todos() {
-  view.innerHTML = `<div class="narrow">${pageHead('해야 할 일', '', '<button id="add-card" class="btn">카드 추가</button>')}<div class="todo-board">${arr('todoCards').map((card) => `<article class="civil-card todo-card"><div class="item-top"><h3>${esc(card.title)}</h3><div>${rowActions('todoCards', card.id)}</div></div><button class="btn outline" data-add-section="${card.id}">섹션 추가</button>${arr('todoSections').filter((s) => s.cardId === card.id).map((sec) => `<section class="todo-section"><div class="item-top"><strong>${esc(sec.title)}</strong><div>${rowActions('todoSections', sec.id)}</div></div><button class="link-btn" data-add-item="${sec.id}">할 일 추가</button>${arr('todoItems').filter((i) => i.sectionId === sec.id).map((i) => `<div class="todo-item ${i.done ? 'done' : ''}"><button class="box" data-toggle-item="${i.id}">${i.done ? '✓' : ''}</button><span>${esc(i.content)}</span><span>${rowActions('todoItems', i.id)}</span></div>`).join('')}</section>`).join('')}</article>`).join('') || '<div class="empty">등록된 카드가 없습니다.</div>'}</div></div>`;
-  const editCard = (id) => { const old = id ? arr('todoCards').find((x) => x.id === id) : { id: nextId('todoCards'), title: '', displayOrder: arr('todoCards').length + 1 }; formModal(id ? '카드 수정' : '카드 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoCards').push({ ...out, createdAt: new Date().toISOString() })); };
-  const editSection = (id, cardId) => { const old = id ? arr('todoSections').find((x) => x.id === id) : { id: nextId('todoSections'), cardId, title: '', displayOrder: 0 }; formModal(id ? '섹션 수정' : '섹션 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoSections').push({ ...out, createdAt: new Date().toISOString() })); };
-  const editItem = (id, sectionId) => { const old = id ? arr('todoItems').find((x) => x.id === id) : { id: nextId('todoItems'), sectionId, content: '', done: false, displayOrder: 0 }; formModal(id ? '할 일 수정' : '할 일 추가', [{ name: 'content', label: '내용 *', required: true }, { name: 'done', label: '완료', type: 'checkbox' }], old, (out) => id ? Object.assign(old, out) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() })); };
-  $('#add-card').onclick = () => editCard(); bindCrud('todoCards', editCard); bindCrud('todoSections', editSection); bindCrud('todoItems', editItem); $$('[data-add-section]').forEach((b) => b.onclick = () => editSection(null, Number(b.dataset.addSection))); $$('[data-add-item]').forEach((b) => b.onclick = () => editItem(null, Number(b.dataset.addItem))); $$('[data-toggle-item]').forEach((b) => b.onclick = () => { const it = arr('todoItems').find((x) => x.id === Number(b.dataset.toggleItem)); it.done = !it.done; save(); render(); });
+  const cards = arr('todoCards').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  const sections = arr('todoSections');
+  const items = arr('todoItems').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  const openItems = items.filter((item) => !item.done);
+  const doneItems = items.filter((item) => item.done);
+  const completion = items.length ? Math.round(doneItems.length / items.length * 100) : 0;
+  const recentOpen = openItems.slice(0, 6);
+  view.innerHTML = `<div class="workplace-shell">
+    <section class="workplace-hero">
+      <div>
+        <p class="workspace-kicker">Operations Workspace</p>
+        <h1>해야 할 일</h1>
+        <p>카드와 섹션을 유지하면서 오늘 처리할 항목을 빠르게 찾고 완료 상태를 관리합니다.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="add-card" class="btn secondary">카드 추가</button>
+        <button id="quick-item" class="btn">빠른 할 일 추가</button>
+      </div>
+    </section>
+    <section class="workspace-metrics">
+      <article><span>전체 업무</span><strong>${items.length}</strong><small>${cards.length}개 카드</small></article>
+      <article><span>진행중</span><strong>${openItems.length}</strong><small>완료 전 항목</small></article>
+      <article><span>완료</span><strong>${doneItems.length}</strong><small>${completion}% 처리</small></article>
+      <article><span>섹션</span><strong>${sections.length}</strong><small>업무 흐름 단위</small></article>
+    </section>
+    <section class="todo-commandbar">
+      <div class="search enterprise-search"><input id="todo-query" placeholder="할 일, 섹션, 카드명 검색"></div>
+      <div class="segmented" id="todo-filter">
+        <button class="active" data-state="all">전체</button>
+        <button data-state="open">진행중</button>
+        <button data-state="done">완료</button>
+      </div>
+    </section>
+    <section class="focus-strip">
+      <div class="focus-head"><span>지금 볼 항목</span><strong>${recentOpen.length ? '진행중 업무' : '대기 업무 없음'}</strong></div>
+      <div class="focus-list">${recentOpen.map((item) => todoFocusItem(item)).join('') || '<p class="muted">모든 할 일이 완료되었습니다.</p>'}</div>
+    </section>
+    <section id="todo-board" class="enterprise-board"></section>
+  </div>`;
+
+  const editCard = (id) => {
+    const old = id ? arr('todoCards').find((x) => x.id === id) : { id: nextId('todoCards'), title: '', displayOrder: arr('todoCards').length + 1 };
+    formModal(id ? '카드 수정' : '카드 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoCards').push({ ...out, createdAt: new Date().toISOString() }));
+  };
+  const editSection = (id, cardId) => {
+    const old = id ? arr('todoSections').find((x) => x.id === id) : { id: nextId('todoSections'), cardId, title: '', displayOrder: 0 };
+    formModal(id ? '섹션 수정' : '섹션 추가', [{ name: 'title', label: '제목 *', required: true }], old, (out) => id ? Object.assign(old, out) : arr('todoSections').push({ ...out, createdAt: new Date().toISOString() }));
+  };
+  const editItem = (id, sectionId) => {
+    const old = id ? arr('todoItems').find((x) => x.id === id) : { id: nextId('todoItems'), sectionId, content: '', done: false, displayOrder: arr('todoItems').filter((item) => item.sectionId === sectionId).length + 1 };
+    formModal(id ? '할 일 수정' : '할 일 추가', [{ name: 'content', label: '내용 *', required: true }, { name: 'done', label: '완료', type: 'checkbox' }], old, (out) => id ? Object.assign(old, out) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() }));
+  };
+  const quickItem = () => {
+    const firstSection = arr('todoSections')[0];
+    if (!firstSection) return alert('먼저 섹션을 추가하세요.');
+    editItem(null, firstSection.id);
+  };
+  const drawBoard = () => {
+    const query = $('#todo-query').value.trim().toLowerCase();
+    const state = $('#todo-filter .active').dataset.state;
+    $('#todo-board').innerHTML = cards.map((card) => {
+      const cardSections = sections.filter((section) => section.cardId === card.id).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+      const renderedSections = cardSections.map((section) => {
+        const sectionItems = items.filter((item) => item.sectionId === section.id)
+          .filter((item) => state === 'all' || (state === 'open' ? !item.done : item.done))
+          .filter((item) => !query || `${card.title} ${section.title} ${item.content}`.toLowerCase().includes(query));
+        if (!sectionItems.length && query) return '';
+        const doneCount = sectionItems.filter((item) => item.done).length;
+        return `<article class="workstream">
+          <header><div><span>${esc(card.title)}</span><h3>${esc(section.title)}</h3></div><div class="stream-actions"><small>${doneCount}/${sectionItems.length}</small><button class="link-btn" data-add-section="${card.id}">섹션</button>${rowActions('todoSections', section.id)}${rowActions('todoCards', card.id)}</div></header>
+          <div class="work-items">${sectionItems.map((item) => todoCardItem(item)).join('') || '<p class="muted">표시할 항목이 없습니다.</p>'}</div>
+          <button class="add-inline" data-add-item="${section.id}">+ 할 일 추가</button>
+        </article>`;
+      }).join('');
+      if (!renderedSections.trim() && query) return '';
+      return renderedSections || `<article class="workstream empty-stream"><header><div><span>${esc(card.title)}</span><h3>섹션 없음</h3></div><div class="stream-actions">${rowActions('todoCards', card.id)}</div></header><button class="add-inline" data-add-section="${card.id}">+ 섹션 추가</button></article>`;
+    }).join('') || '<div class="empty-state">검색 결과가 없습니다.</div>';
+    bindTodoActions(editCard, editSection, editItem);
+  };
+  const bindTodoActions = (editCardFn, editSectionFn, editItemFn) => {
+    bindCrud('todoCards', editCardFn);
+    bindCrud('todoSections', editSectionFn);
+    bindCrud('todoItems', editItemFn);
+    $$('[data-add-section]').forEach((b) => b.onclick = () => editSectionFn(null, Number(b.dataset.addSection)));
+    $$('[data-add-item]').forEach((b) => b.onclick = () => editItemFn(null, Number(b.dataset.addItem)));
+    $$('[data-toggle-item]').forEach((b) => b.onclick = () => {
+      const item = arr('todoItems').find((x) => x.id === Number(b.dataset.toggleItem));
+      item.done = !item.done;
+      save();
+      todos();
+    });
+  };
+  $('#add-card').onclick = () => editCard();
+  $('#quick-item').onclick = quickItem;
+  $('#todo-query').oninput = drawBoard;
+  $$('#todo-filter button').forEach((button) => button.onclick = () => {
+    $$('#todo-filter button').forEach((item) => item.classList.remove('active'));
+    button.classList.add('active');
+    drawBoard();
+  });
+  drawBoard();
+}
+function todoFocusItem(item) {
+  const section = arr('todoSections').find((entry) => entry.id === item.sectionId);
+  const card = section ? arr('todoCards').find((entry) => entry.id === section.cardId) : null;
+  return `<button class="focus-item" data-toggle-item="${item.id}"><span></span><div><strong>${esc(item.content)}</strong><small>${esc(card?.title || '카드 없음')} · ${esc(section?.title || '섹션 없음')}</small></div></button>`;
+}
+function todoCardItem(item) {
+  const section = arr('todoSections').find((entry) => entry.id === item.sectionId);
+  return `<div class="enterprise-task ${item.done ? 'is-done' : ''}">
+    <button class="task-check" data-toggle-item="${item.id}">${item.done ? '✓' : ''}</button>
+    <div class="task-copy"><strong>${esc(item.content)}</strong><small>${esc(section?.title || '')}</small></div>
+    <div class="task-actions">${rowActions('todoItems', item.id)}</div>
+  </div>`;
 }
 function files() {
   view.innerHTML = `<div class="narrow">${pageHead('자료실', `총 ${arr('files').length}개 파일`, '<button id="add-file" class="btn">파일 업로드</button>')}<div class="cards">${arr('files').map((f) => `<article class="civil-card"><h3>${esc(f.file?.name || f.fileName || f.name)}</h3><p class="mini">${esc(f.category || '기타')} · ${projectName(f.projectId)}<br>${esc(f.description || '')}<br>${date(f.createdAt || f.uploadedAt)}</p><button class="link-btn" data-download-file="${f.id}">다운로드</button> ${rowActions('files', f.id)}</article>`).join('') || '<div class="empty civil-card">파일이 없습니다.</div>'}</div></div>`;
