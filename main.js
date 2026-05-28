@@ -86,11 +86,19 @@ function bindRouteLinks(root = document) {
 function renderNav() {
   const dueComplaints = arr('complaints').filter((x) => x.processStatus !== '완료').length;
   const dueConsult = arr('consultations').filter((x) => x.status !== '회신완료').length;
-  $('#nav').innerHTML = routes.map(([path, label, icon]) => {
+  const groups = [
+    ['업무 포탈', ['/', '/todos', '/projects']],
+    ['대외 대응', ['/complaints', '/consultations', '/schedules']],
+    ['재정·자료', ['/budgets', '/executions', '/files', '/contacts']],
+    ['운영', ['/chatbot', '/backup', '/tips', '/settings']]
+  ];
+  const byPath = new Map(routes.map((item) => [item[0], item]));
+  $('#nav').innerHTML = groups.map(([group, paths]) => `<div class="nav-group"><div class="nav-group-title">${group}</div>${paths.map((path) => {
+    const [, label, icon] = byPath.get(path);
     const active = path === '/' ? route === '/' : route.startsWith(path);
     const count = path === '/complaints' ? dueComplaints : path === '/consultations' ? dueConsult : 0;
     return `<button class="nav-btn ${active ? 'active' : ''}" data-path="${path}"><span class="nav-ico">${icon}</span><span class="nav-label">${label}</span>${count ? `<span class="badge">${count}</span>` : ''}</button>`;
-  }).join('');
+  }).join('')}</div>`).join('');
   $$('.nav-btn').forEach((b) => b.onclick = () => setRoute(b.dataset.path));
 }
 function render() {
@@ -219,41 +227,76 @@ function dashboard() {
   const todoDone = arr('todoItems').filter((t) => t.done).length;
   const todoRate = todoTotal ? Math.round(todoDone / todoTotal * 100) : 0;
   const riskRate = Math.min(100, riskCount * 18);
-  const summary = riskCount ? `${riskCount}건의 주의 항목을 먼저 확인하세요.` : '긴급 위험 없이 안정적으로 관리 중입니다.';
-  view.innerHTML = `<div class="dashboard-wrap refreshed-dashboard">
-    <section class="dashboard-hero">
-      <div>
-        <p class="workspace-kicker">Civil Operations</p>
-        <h1>오늘의 업무 현황</h1>
-        <p>${new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })} · ${summary}</p>
+  const todayLabel = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+  const primaryAction = dueItems[0] || delayedProjects[0] || upcomingSchedules[0];
+  const actionText = primaryAction ? `${primaryAction.kind || '현장'} · ${primaryAction.title || primaryAction.name}` : '긴급 처리 항목 없음';
+  const focusProjects = [...delayedProjects, ...arr('projects').filter((p) => p.status === '진행중' && !delayedProjects.includes(p)).sort((a, b) => Number(a.actualProgress || 0) - Number(b.actualProgress || 0))].slice(0, 5);
+  view.innerHTML = `<div class="portal-shell refreshed-dashboard">
+    <section class="portal-hero">
+      <div class="portal-hero-copy">
+        <p class="workspace-kicker">Civil Works Portal</p>
+        <h1>오늘의 토목 업무 포탈</h1>
+        <p>${todayLabel} · ${riskCount ? `${riskCount}건의 주의 항목` : '안정 운영 중'} · ${actionText}</p>
+        <div class="portal-search">
+          <input id="portal-search" autocomplete="off" placeholder="공사명, 위치, 민원, 협의, 일정, 자료 검색">
+          <div id="portal-results" class="portal-results"></div>
+        </div>
       </div>
-      <div class="hero-actions">
-        <button class="btn secondary" data-go="/tips">사용팁</button>
-        <button class="btn outline light-action" data-go="/schedules">일정 보기</button>
-        <button id="print" class="btn">PDF 다운로드</button>
+      <div class="civil-visual" aria-hidden="true">
+        <div class="scan-line"></div>
+        <div class="crane mast"></div><div class="crane jib"></div><div class="crane cable"></div><div class="crane load"></div>
+        <div class="site-grid"></div>
+        <div class="road"><span></span><span></span><span></span></div>
+        <div class="signal"><i></i><i></i><i></i></div>
       </div>
     </section>
-    <section class="quick-actions">
-      <button data-go="/projects"><span>공사</span><strong>진행 현장 확인</strong></button>
-      <button data-go="/complaints"><span>민원</span><strong>미처리 ${openComplaints.length}건</strong></button>
-      <button data-go="/consultations"><span>협의</span><strong>회신 대기 ${openConsultations.length}건</strong></button>
-      <button data-go="/backup"><span>데이터</span><strong>백업/복구</strong></button>
+    <section class="command-strip">
+      <button data-go="/todos"><span>오늘 업무</span><strong>${undone}건 대기</strong></button>
+      <button data-go="/projects"><span>현장</span><strong>${active}/${projectTotal} 진행</strong></button>
+      <button data-go="/complaints"><span>민원</span><strong>${openComplaints.length}건 미처리</strong></button>
+      <button data-go="/consultations"><span>협의</span><strong>${openConsultations.length}건 회신 대기</strong></button>
+      <button data-go="/executions"><span>집행률</span><strong>${budgetRate}%</strong></button>
     </section>
-    <section class="gauge-grid">
-      ${gaugeCard('주의 필요', riskRate, riskCount, '지연·마감·예산 위험', '/complaints', 'danger')}
-      ${gaugeCard('공사 가동률', projectRate, `${active}/${projectTotal}`, `지연 ${delayedProjects.length}건 포함`, '/projects', 'blue')}
-      ${gaugeCard('할 일 완료율', todoRate, `${todoRate}%`, `미완료 ${undone}건`, '/todos', 'green')}
-      ${gaugeCard('예산 집행률', budgetRate, `${budgetRate}%`, `${shortMoney(executed)} / ${shortMoney(totalBudget)}원`, '/executions', budgetRate >= 90 ? 'warning' : 'navy')}
+    <section class="portal-metrics">
+      ${metricCard('주의 필요', riskCount, '지연·마감·예산 위험', riskRate, 'danger', '/complaints')}
+      ${metricCard('공사 가동률', `${active}/${projectTotal}`, `지연 ${delayedProjects.length}건`, projectRate, 'blue', '/projects')}
+      ${metricCard('할 일 완료율', `${todoRate}%`, `미완료 ${undone}건`, todoRate, 'green', '/todos')}
+      ${metricCard('예산 집행률', `${budgetRate}%`, `${shortMoney(executed)} / ${shortMoney(totalBudget)}원`, budgetRate, budgetRate >= 90 ? 'warning' : 'navy', '/executions')}
     </section>
-    <div class="grid dashboard-grid">
-      <section class="civil-card dashboard-panel priority-panel"><div class="panel-head"><h3>우선 처리</h3><button class="link-btn" data-go="/complaints">민원 보기</button></div>${dueItems.length ? dueItems.slice(0, 7).map((x) => `<button class="work-row ${x.remain <= 0 ? 'hot' : ''}" data-go="${x.route}"><span class="work-kind">${x.kind}</span><span class="work-title">${esc(x.title)}</span><span class="work-meta">${dueLabel(x.remain)} · ${esc(x.status || '-')}</span></button>`).join('') : '<p class="mini strong-empty">7일 이내 마감 민원·협의가 없습니다.</p>'}</section>
-      <section class="civil-card dashboard-panel"><div class="panel-head"><h3>공사 위험</h3><button class="link-btn" data-go="/projects">공사 보기</button></div>${delayedProjects.length ? delayedProjects.slice(0, 5).map((p) => `<button class="work-row hot" data-project="${p.id}"><span class="work-kind">지연</span><span class="work-title">${esc(p.name)}</span><span class="work-meta">${date(p.endDate)} · 공정률 ${p.actualProgress || 0}%</span></button>`).join('') : '<p class="mini strong-empty">준공일이 지난 진행중 공사가 없습니다.</p>'}</section>
-      <section class="civil-card dashboard-panel"><div class="panel-head"><h3>이번 주 일정</h3><button class="link-btn" data-go="/schedules">일정 보기</button></div>${upcomingSchedules.length ? upcomingSchedules.map((s) => `<button class="work-row" data-go="/schedules"><span class="work-kind">${dueLabel(s.remain)}</span><span class="work-title">${esc(s.title)}</span><span class="work-meta">${date(s.date || s.startDate)} · ${esc(s.location || '-')}</span></button>`).join('') : '<p class="mini strong-empty">이번 주 등록된 일정이 없습니다.</p>'}</section>
-      <section class="civil-card dashboard-panel"><div class="panel-head"><h3>예산 집행</h3><button class="link-btn" data-go="/budgets">예산 보기</button></div>${budgetRows.length ? budgetRows.slice(0, 6).map((b) => `<div class="budget-row"><div class="budget-top"><strong>${esc(b.name)}</strong><span class="${b.rate >= 100 ? 'rate danger' : b.rate >= 90 ? 'rate warn' : 'rate'}">${b.rate}%</span></div><div class="progress"><span style="width:${pct(b.rate)}%"></span></div><p class="mini">잔액 ${money(b.left)} · 집행 ${money(b.used)}</p></div>`).join('') : '<p class="mini strong-empty">등록된 예산이 없습니다.</p>'}</section>
+    <div class="portal-grid">
+      <section class="portal-panel priority-panel"><div class="panel-head"><div><span>Priority</span><h3>우선 처리</h3></div><button class="link-btn" data-go="/todos">업무 보기</button></div>${dueItems.length ? dueItems.slice(0, 7).map((x) => `<button class="portal-row ${x.remain <= 0 ? 'hot' : ''}" data-go="${x.route}"><span>${x.kind}</span><strong>${esc(x.title)}</strong><small>${dueLabel(x.remain)} · ${esc(x.status || '-')}</small></button>`).join('') : '<p class="mini strong-empty">7일 이내 마감 민원·협의가 없습니다.</p>'}</section>
+      <section class="portal-panel"><div class="panel-head"><div><span>Sites</span><h3>현장 포커스</h3></div><button class="link-btn" data-go="/projects">공사 보기</button></div>${focusProjects.length ? focusProjects.map((p) => `<button class="site-row ${isDelayedProject(p) ? 'hot' : ''}" data-project="${p.id}"><div><strong>${esc(p.name)}</strong><small>${esc(p.location || '-')} · ${date(p.endDate)}</small></div><span>${pct(p.actualProgress)}%</span><div class="progress"><span style="width:${pct(p.actualProgress)}%"></span></div></button>`).join('') : '<p class="mini strong-empty">진행중 현장이 없습니다.</p>'}</section>
+      <section class="portal-panel"><div class="panel-head"><div><span>Calendar</span><h3>이번 주 일정</h3></div><button class="link-btn" data-go="/schedules">일정 보기</button></div>${upcomingSchedules.length ? upcomingSchedules.map((s) => `<button class="portal-row" data-go="/schedules"><span>${dueLabel(s.remain)}</span><strong>${esc(s.title)}</strong><small>${date(s.date || s.startDate)} · ${esc(s.location || '-')}</small></button>`).join('') : '<p class="mini strong-empty">이번 주 등록된 일정이 없습니다.</p>'}</section>
+      <section class="portal-panel"><div class="panel-head"><div><span>Budget</span><h3>예산 집행</h3></div><button class="link-btn" data-go="/budgets">예산 보기</button></div>${budgetRows.length ? budgetRows.slice(0, 6).map((b) => `<div class="budget-row"><div class="budget-top"><strong>${esc(b.name)}</strong><span class="${b.rate >= 100 ? 'rate danger' : b.rate >= 90 ? 'rate warn' : 'rate'}">${b.rate}%</span></div><div class="progress"><span style="width:${pct(b.rate)}%"></span></div><p class="mini">잔액 ${money(b.left)} · 집행 ${money(b.used)}</p></div>`).join('') : '<p class="mini strong-empty">등록된 예산이 없습니다.</p>'}</section>
     </div>
   </div>`;
   bindRouteLinks(view);
-  $('#print').onclick = () => window.print();
+  bindPortalSearch();
+}
+function metricCard(label, main, sub, value, tone, target) {
+  return `<button class="metric-card ${tone}" data-go="${target}"><span>${esc(label)}</span><strong>${esc(main)}</strong><small>${esc(sub)}</small><div class="metric-bar"><i style="width:${pct(value)}%"></i></div></button>`;
+}
+function portalSearchRows(q) {
+  const s = q.trim().toLowerCase();
+  if (!s) return [];
+  const rows = [
+    ...arr('projects').map((p) => ({ type: '공사', title: p.name, meta: `${p.location || '-'} · ${p.status || '-'}`, projectId: p.id, text: `${p.name} ${p.location} ${p.contractor} ${p.category}` })),
+    ...arr('complaints').map((x) => ({ type: '민원', title: x.title, meta: `${x.complainant || '-'} · ${date(x.dueDate)}`, route: '/complaints', text: `${x.title} ${x.complainant} ${x.address} ${x.content}` })),
+    ...arr('consultations').map((x) => ({ type: '협의', title: x.title, meta: `${x.department || '-'} · ${date(x.dueDate)}`, route: '/consultations', text: `${x.title} ${x.department} ${x.content} ${x.result}` })),
+    ...arr('schedules').map((x) => ({ type: '일정', title: x.title, meta: `${date(x.date || x.startDate)} · ${x.location || '-'}`, route: '/schedules', text: `${x.title} ${x.location} ${x.memo}` })),
+    ...arr('files').map((x) => ({ type: '자료', title: x.file?.name || x.fileName || x.name, meta: `${x.category || '기타'} · ${projectName(x.projectId)}`, route: '/files', text: `${x.file?.name || x.fileName || x.name} ${x.description} ${x.category}` }))
+  ];
+  return rows.filter((row) => `${row.text} ${row.title} ${row.meta}`.toLowerCase().includes(s)).slice(0, 8);
+}
+function bindPortalSearch() {
+  const input = $('#portal-search');
+  const results = $('#portal-results');
+  const draw = () => {
+    const rows = portalSearchRows(input.value);
+    results.innerHTML = input.value.trim() ? (rows.length ? rows.map((row) => `<button ${row.projectId ? `data-project="${row.projectId}"` : `data-go="${row.route}"`}><span>${esc(row.type)}</span><strong>${esc(row.title || '-')}</strong><small>${esc(row.meta || '')}</small></button>`).join('') : '<p>검색 결과가 없습니다.</p>') : '';
+    bindRouteLinks(results);
+  };
+  input.oninput = draw;
 }
 function gaugeCard(label, value, main, sub, target, tone = 'blue') {
   const safe = pct(value);
