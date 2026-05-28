@@ -188,6 +188,11 @@ body.dark .gauge:before{background:#111827}body.dark .tip-card{background:#11182
 .project-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 42px;gap:8px;align-items:center}
 .project-progress-row strong{color:#344054;font-size:12px;text-align:right}
 .chip.active#risk-only{background:#fef3f2;border-color:#fecdca;color:var(--workspace-danger)}
+.smart-toolbar{align-items:stretch}.smart-toolbar .control-select{min-width:150px}.smart-toolbar .search{min-width:260px}
+.scope-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.scope-card{border:1px solid var(--workspace-line);border-radius:8px;background:#fff;padding:12px;text-align:left;box-shadow:var(--workspace-shadow)}
+.scope-card span{display:block;color:var(--workspace-muted);font-size:11px;font-weight:850}.scope-card strong{display:block;margin-top:6px;color:var(--workspace-text);font-size:22px;line-height:1}
+.scope-card:hover{border-color:#84caff;background:#f8fbff;transform:translateY(-1px)}
 .task-list-shell .workplace-hero{background:linear-gradient(135deg,#0f172a 0%,#164e63 55%,#065f46 100%)}
 .task-list-shell .workplace-hero,.task-list-shell .workspace-metrics article,.todo-commandbar,.month-list-block,.task-table-card{animation:softEnter .28s ease both}
 .task-list-shell .workspace-metrics article:nth-child(2){animation-delay:.03s}.task-list-shell .workspace-metrics article:nth-child(3){animation-delay:.06s}.task-list-shell .workspace-metrics article:nth-child(4){animation-delay:.09s}
@@ -233,9 +238,9 @@ body.dark .gauge:before{background:#111827}body.dark .tip-card{background:#11182
 @keyframes checkPop{0%{transform:scale(.82)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
 body.dark .project-summary article,body.dark .project-controls select,body.dark .control-select,body.dark .project-list-item,body.dark .task-group-row,body.dark .month-list-block,body.dark .list-panel-head{background:#182235;border-color:#334155;color:#e5e7eb}
 body.dark .organized-items,body.dark .task-row-done{background:#111827}body.dark .due-overdue{background:#2a1720}body.dark .due-today{background:#102238}body.dark .due-soon{background:#2a2412}body.dark .project-summary strong,body.dark .project-progress-row strong,body.dark .task-group-row strong,body.dark .task-table strong{color:#e5e7eb}
-body.dark .project-list-meta span,body.dark .task-group-row small{background:#111827;color:#cbd5e1}
+body.dark .project-list-meta span,body.dark .task-group-row small{background:#111827;color:#cbd5e1}body.dark .scope-card{background:#182235;border-color:#334155}body.dark .scope-card strong{color:#e5e7eb}
 @media(max-width:1100px){.project-organizer,.task-layout,.planner-layout{grid-template-columns:1fr}.project-list-pane{border-right:0}.organized-items{max-height:420px;overflow:auto}}
-@media(max-width:720px){.project-summary{grid-template-columns:repeat(3,1fr)}.project-controls{grid-template-columns:1fr}.list-panel-head{align-items:flex-start;flex-direction:column}.task-table-card{overflow:auto}.task-table{min-width:680px}}
+@media(max-width:720px){.project-summary{grid-template-columns:repeat(3,1fr)}.project-controls,.scope-grid{grid-template-columns:1fr}.smart-toolbar .search,.smart-toolbar .control-select{min-width:0;width:100%}.list-panel-head{align-items:flex-start;flex-direction:column}.task-table-card{overflow:auto}.task-table{min-width:680px}}
 
 /* Civil works portal refresh */
 .nav-group{display:grid;gap:4px;margin-bottom:12px}
