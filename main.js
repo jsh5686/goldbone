@@ -558,70 +558,55 @@ function todos() {
   const cards = arr('todoCards').sort((a, b) => todoMonthValue(b).localeCompare(todoMonthValue(a)) || (a.displayOrder || 0) - (b.displayOrder || 0));
   const sections = arr('todoSections').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
   const topRows = rows.filter((row) => !row.item.parentId);
-  const todayRows = topRows.filter((row) => row.item.dueDate === today() && !row.item.done);
   const week = weekRangeLabel();
+  const todayRows = topRows.filter((row) => row.item.dueDate === today() && !row.item.done);
   const weekRows = topRows.filter((row) => row.item.dueDate >= week.start && row.item.dueDate <= week.end && !row.item.done);
   const overdueRows = topRows.filter((row) => row.dueState === 'overdue');
-  const openItems = rows.filter((row) => !row.item.done);
-  const completion = rows.length ? Math.round((rows.length - openItems.length) / rows.length * 100) : 0;
+  const doneRows = topRows.filter((row) => row.item.done);
+  const openRows = topRows.filter((row) => !row.item.done);
+  const completion = topRows.length ? Math.round(doneRows.length / topRows.length * 100) : 0;
   const monthOptions = [...new Set(cards.map(todoMonthValue))];
   const currentMonthValue = monthOptions.includes(today().slice(0, 7)) ? today().slice(0, 7) : monthOptions[0] || today().slice(0, 7);
-  view.innerHTML = `<div class="todo-workspace">
-    <section class="todo-hero">
+  view.innerHTML = `<div class="todo-os">
+    <section class="todo-os-top">
       <div>
-        <p class="workspace-kicker">Action Desk</p>
+        <p class="workspace-kicker">Field Action OS</p>
         <h1>해야 할 일</h1>
-        <p>${date(today())} · 오늘 ${todayRows.length}건 · 초과 ${overdueRows.length}건 · 완료율 ${completion}%</p>
+        <p>${date(today())} · 오늘 ${todayRows.length}건 · 초과 ${overdueRows.length}건 · 이번 주 ${weekRows.length}건</p>
       </div>
-      <div class="todo-hero-actions">
-        <button id="quick-plan" class="btn secondary">업무 묶음</button>
-        <button id="open-add-task" class="btn">할 일 추가</button>
-      </div>
+      <button id="open-add-task" class="btn">새 할 일</button>
     </section>
-    <section class="todo-capture">
-      <input id="quick-task" placeholder="지금 해야 할 일을 바로 입력">
-      <select id="quick-section">${sections.map((section) => `<option value="${section.id}">${esc(section.title)}</option>`).join('')}</select>
+    <section class="todo-inbox">
+      <div class="quick-icon">+</div>
+      <input id="quick-task" placeholder="예: 감만2동 공정현황 제출 내일까지">
+      <select id="quick-priority"><option value="normal">보통</option><option value="high">중요</option><option value="low">낮음</option></select>
       <input id="quick-due" type="date" value="${today()}">
-      <select id="quick-priority"><option value="normal">보통</option><option value="high">높음</option><option value="low">낮음</option></select>
-      <button id="quick-add" class="btn">추가</button>
+      <button id="quick-add" class="btn">입력</button>
     </section>
-    <section class="todo-metrics">
-      <button data-scope-shortcut="today"><span>오늘</span><strong>${todayRows.length}</strong><small>${date(today())}</small></button>
-      <button data-scope-shortcut="week"><span>이번 주</span><strong>${weekRows.length}</strong><small>${week.label}</small></button>
-      <button class="${overdueRows.length ? 'is-hot' : ''}" data-scope-shortcut="overdue"><span>기한 초과</span><strong>${overdueRows.length}</strong><small>먼저 처리</small></button>
-      <button data-scope-shortcut="done"><span>완료율</span><strong>${completion}%</strong><small>${rows.length}개 기준</small></button>
-    </section>
-    <section class="todo-control">
-      <div class="search"><input id="todo-query" placeholder="할 일, 업무 묶음, 관련 공사 검색"></div>
-      <select id="todo-month" class="control-select">${monthOptions.map((m) => `<option value="${m}" ${m === currentMonthValue ? 'selected' : ''}>${m.replace('-', '년 ')}월</option>`).join('') || `<option value="${today().slice(0, 7)}">${today().slice(0, 7).replace('-', '년 ')}월</option>`}</select>
-      <select id="todo-project" class="control-select">${projectOptions().map(([id, name]) => `<option value="${esc(id ?? '')}">${esc(id ? name : '전체 공사')}</option>`).join('')}</select>
-      <div class="segmented" id="todo-scope">
-        <button class="active" data-scope="all">전체</button>
-        <button data-scope="today">오늘</button>
-        <button data-scope="week">이번 주</button>
-        <button data-scope="overdue">초과</button>
-        <button data-scope="open">진행중</button>
-        <button data-scope="done">완료</button>
-      </div>
-    </section>
-    <section class="todo-grid">
-      <aside class="today-queue">
-        <div class="todo-panel-head"><span>Focus Queue</span><strong>오늘 처리 큐</strong></div>
-        <div id="focus-list"></div>
+    <section class="todo-os-layout">
+      <aside class="todo-rail">
+        <button class="active" data-view="today"><span>오늘</span><strong>${todayRows.length}</strong></button>
+        <button data-view="overdue"><span>초과</span><strong>${overdueRows.length}</strong></button>
+        <button data-view="week"><span>이번 주</span><strong>${weekRows.length}</strong></button>
+        <button data-view="open"><span>진행중</span><strong>${openRows.length}</strong></button>
+        <button data-view="done"><span>완료</span><strong>${doneRows.length}</strong></button>
+        <button data-view="all"><span>전체</span><strong>${topRows.length}</strong></button>
       </aside>
-      <section class="todo-board-v2">
-        <div class="todo-column overdue"><div class="column-head"><span>Overdue</span><strong>초과</strong></div><div id="col-overdue" class="todo-card-list"></div></div>
-        <div class="todo-column today"><div class="column-head"><span>Today</span><strong>오늘</strong></div><div id="col-today" class="todo-card-list"></div></div>
-        <div class="todo-column week"><div class="column-head"><span>Upcoming</span><strong>예정</strong></div><div id="col-week" class="todo-card-list"></div></div>
-        <div class="todo-column done"><div class="column-head"><span>Done</span><strong>완료</strong></div><div id="col-done" class="todo-card-list"></div></div>
-      </section>
-      <aside class="todo-groups-v2">
-        <div class="todo-panel-head"><span>Workstreams</span><strong>업무 묶음</strong></div>
-        <div id="task-groups"></div>
+      <main class="todo-list-shell">
+        <div class="todo-list-toolbar">
+          <div class="search"><input id="todo-query" placeholder="검색"></div>
+          <select id="todo-month" class="control-select">${monthOptions.map((m) => `<option value="${m}" ${m === currentMonthValue ? 'selected' : ''}>${m.replace('-', '년 ')}월</option>`).join('') || `<option value="${today().slice(0, 7)}">${today().slice(0, 7).replace('-', '년 ')}월</option>`}</select>
+          <select id="todo-project" class="control-select">${projectOptions().map(([id, name]) => `<option value="${esc(id ?? '')}">${esc(id ? name : '전체 공사')}</option>`).join('')}</select>
+        </div>
+        <div class="todo-list-title"><div><span id="todo-list-kicker">Today</span><strong id="todo-list-heading">오늘 실행</strong></div><small id="todo-list-count"></small></div>
+        <div id="todo-action-list" class="todo-action-list"></div>
+      </main>
+      <aside class="todo-context">
+        <section class="context-card"><span>완료율</span><strong>${completion}%</strong><div class="progress"><span style="width:${completion}%"></span></div></section>
+        <section class="context-card"><span>업무 묶음</span><div id="task-groups"></div><button id="quick-plan" class="btn outline">묶음 추가</button></section>
       </aside>
     </section>
   </div>`;
-
   const sectionTitles = [...new Set(sections.map((section) => section.title).filter(Boolean))];
   const monthCardOptions = () => arr('todoCards').sort((a, b) => todoMonthValue(b).localeCompare(todoMonthValue(a))).map((card) => [card.id, todoMonthLabel(card)]);
   const sectionOptions = () => arr('todoSections').sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)).map((section) => {
@@ -698,10 +683,19 @@ function todos() {
       id ? Object.assign(old, out, { updatedAt: new Date().toISOString() }) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() });
     });
   };
+  const activeView = () => $('.todo-rail button.active')?.dataset.view || 'today';
+  const viewLabels = {
+    today: ['Today', '오늘 실행'],
+    overdue: ['Overdue', '기한 초과'],
+    week: ['This Week', '이번 주 실행'],
+    open: ['Open', '진행중'],
+    done: ['Done', '완료됨'],
+    all: ['All Tasks', '전체 업무']
+  };
   const drawList = () => {
     const query = $('#todo-query').value.trim().toLowerCase();
     const month = $('#todo-month').value;
-    const scope = $('#todo-scope .active').dataset.scope;
+    const scope = activeView();
     const projectId = nullableNumber($('#todo-project').value);
     const filtered = todoRows().filter((row) => !row.item.parentId)
       .filter((row) => row.month === month)
@@ -709,17 +703,11 @@ function todos() {
       .filter((row) => scope === 'all' || (scope === 'open' ? !row.item.done : scope === 'done' ? row.item.done : scope === 'today' ? row.item.dueDate === today() && !row.item.done : scope === 'overdue' ? row.dueState === 'overdue' : row.item.dueDate >= week.start && row.item.dueDate <= week.end && !row.item.done))
       .filter((row) => !query || `${row.item.content} ${row.section?.title || ''} ${row.card?.title || ''} ${row.month} ${projectName(row.item.projectId)} ${todoPriorityLabel(row.item.priority)}`.toLowerCase().includes(query))
       .sort((a, b) => Number(a.item.done) - Number(b.item.done) || todoDueSortValue(a.item.dueDate) - todoDueSortValue(b.item.dueDate) || todoPriorityWeight(b.item.priority) - todoPriorityWeight(a.item.priority) || (a.item.displayOrder || 0) - (b.item.displayOrder || 0));
-    const grouped = {
-      overdue: filtered.filter((row) => row.dueState === 'overdue'),
-      today: filtered.filter((row) => row.item.dueDate === today() && !row.item.done),
-      week: filtered.filter((row) => !row.item.done && row.dueState !== 'overdue' && row.item.dueDate !== today()),
-      done: filtered.filter((row) => row.item.done)
-    };
-    $('#focus-list').innerHTML = [...grouped.overdue, ...grouped.today, ...grouped.week].slice(0, 8).map(todoTaskCard).join('') || '<p class="mini strong-empty">지금 처리할 항목이 없습니다.</p>';
-    $('#col-overdue').innerHTML = grouped.overdue.map(todoTaskCard).join('') || '<p class="mini empty-column">초과 항목 없음</p>';
-    $('#col-today').innerHTML = grouped.today.map(todoTaskCard).join('') || '<p class="mini empty-column">오늘 항목 없음</p>';
-    $('#col-week').innerHTML = grouped.week.map(todoTaskCard).join('') || '<p class="mini empty-column">예정 항목 없음</p>';
-    $('#col-done').innerHTML = grouped.done.slice(0, 16).map(todoTaskCard).join('') || '<p class="mini empty-column">완료 항목 없음</p>';
+    const [kicker, heading] = viewLabels[scope] || viewLabels.today;
+    $('#todo-list-kicker').textContent = kicker;
+    $('#todo-list-heading').textContent = heading;
+    $('#todo-list-count').textContent = `${filtered.length}건`;
+    $('#todo-action-list').innerHTML = filtered.map(todoActionRow).join('') || '<div class="empty-state">조건에 맞는 할 일이 없습니다.</div>';
     $('#task-groups').innerHTML = cards.filter((card) => todoMonthValue(card) === month).map((card) => {
       const cardSections = sections.filter((section) => section.cardId === card.id);
       return `<section class="month-list-block">
@@ -753,11 +741,12 @@ function todos() {
     });
     bindRouteLinks(view);
   };
-  const todoTaskCard = (row) => {
+  const todoActionRow = (row) => {
     const { item, section, card, children, dueState } = row;
     const dueText = item.dueDate ? `${date(item.dueDate)}${dueState === 'overdue' ? ' · 초과' : dueState === 'today' ? ' · 오늘' : dueState === 'soon' ? ' · 임박' : ''}` : '기한 미정';
-    return `<article class="todo-task-card ${item.done ? 'is-done' : ''} ${dueState ? `due-${dueState}` : ''}">
+    return `<article class="todo-action-row ${item.done ? 'is-done' : ''} ${dueState ? `due-${dueState}` : ''}">
       <button class="task-check" data-toggle-item="${item.id}">${item.done ? '✓' : ''}</button>
+      <div class="priority-dot ${esc(item.priority || 'normal')}"></div>
       <div class="todo-task-main">
         <div class="todo-badges">${pill(todoPriorityLabel(item.priority), todoPriorityTone(item.priority))}${item.projectId ? projectLink(item.projectId) : ''}</div>
         <strong>${esc(item.content)}</strong>
@@ -780,14 +769,9 @@ function todos() {
   $('#todo-query').oninput = drawList;
   $('#todo-month').onchange = drawList;
   $('#todo-project').onchange = drawList;
-  $$('#todo-scope button').forEach((button) => button.onclick = () => {
-    $$('#todo-scope button').forEach((item) => item.classList.remove('active'));
+  $$('.todo-rail button').forEach((button) => button.onclick = () => {
+    $$('.todo-rail button').forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
-    drawList();
-  });
-  $$('[data-scope-shortcut]').forEach((button) => button.onclick = () => {
-    const target = button.dataset.scopeShortcut === 'done' ? 'done' : button.dataset.scopeShortcut;
-    $$('#todo-scope button').forEach((item) => item.classList.toggle('active', item.dataset.scope === target));
     drawList();
   });
   drawList();
