@@ -13,6 +13,7 @@ let route = location.hash.replace('#', '') || '/';
 let selectedProject = null;
 let currentMonth = new Date(2026, 4, 1);
 let pendingFilters = {};
+let mainSliderTimer = null;
 let settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{"adminName":"관리자","density":"comfortable","theme":"light"}');
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
@@ -113,6 +114,10 @@ function renderNav() {
 }
 function render() {
   if (!data) return;
+  if (mainSliderTimer) {
+    clearInterval(mainSliderTimer);
+    mainSliderTimer = null;
+  }
   const map = { '/': dashboard, '/todos': todos, '/chatbot': chatbot, '/projects': projects, '/complaints': complaints, '/consultations': consultations, '/budgets': budgets, '/executions': executions, '/schedules': schedules, '/files': files, '/contacts': contacts, '/backup': backup, '/tips': tipsPage, '/settings': settingsPage };
   (map[route] || (() => view.innerHTML = '<div class="empty">Page Not Found</div>'))();
 }
@@ -241,23 +246,67 @@ function dashboard() {
   const primaryAction = dueItems[0] || delayedProjects[0] || upcomingSchedules[0];
   const actionText = primaryAction ? `${primaryAction.kind || '현장'} · ${primaryAction.title || primaryAction.name}` : '긴급 처리 항목 없음';
   const focusProjects = [...delayedProjects, ...arr('projects').filter((p) => p.status === '진행중' && !delayedProjects.includes(p)).sort((a, b) => Number(a.actualProgress || 0) - Number(b.actualProgress || 0))].slice(0, 5);
+  const urgentLabel = dueItems[0] ? `${dueLabel(dueItems[0].remain)} · ${dueItems[0].kind}` : delayedProjects[0] ? `${Math.abs(daysFromToday(delayedProjects[0].endDate) || 0)}일 지연 · 현장` : '안정 운영';
   view.innerHTML = `<div class="portal-shell refreshed-dashboard">
-    <section class="portal-hero">
-      <div class="portal-hero-copy">
-        <p class="workspace-kicker">Civil Works Portal</p>
-        <h1>오늘의 토목 업무 포탈</h1>
-        <p>${todayLabel} · ${riskCount ? `${riskCount}건의 주의 항목` : '안정 운영 중'} · ${actionText}</p>
-        <div class="portal-search">
-          <input id="portal-search" autocomplete="off" placeholder="공사명, 위치, 민원, 협의, 일정, 자료 검색">
-          <div id="portal-results" class="portal-results"></div>
+    <section class="portal-hero main-slider" aria-label="대시보드 메인 슬라이더">
+      <div class="main-slide active" data-slide="0">
+        <div class="portal-hero-copy">
+          <p class="workspace-kicker">Civil Works Portal</p>
+          <h1>오늘의 토목 업무 포탈</h1>
+          <p>${todayLabel} · ${riskCount ? `${riskCount}건의 주의 항목` : '안정 운영 중'} · ${actionText}</p>
+          <div class="portal-search">
+            <input id="portal-search" autocomplete="off" placeholder="공사명, 위치, 민원, 협의, 일정, 자료 검색">
+            <div id="portal-results" class="portal-results"></div>
+          </div>
+        </div>
+        <div class="civil-visual" aria-hidden="true">
+          <div class="scan-line"></div>
+          <div class="crane mast"></div><div class="crane jib"></div><div class="crane cable"></div><div class="crane load"></div>
+          <div class="site-grid"></div>
+          <div class="road"><span></span><span></span><span></span></div>
+          <div class="signal"><i></i><i></i><i></i></div>
         </div>
       </div>
-      <div class="civil-visual" aria-hidden="true">
-        <div class="scan-line"></div>
-        <div class="crane mast"></div><div class="crane jib"></div><div class="crane cable"></div><div class="crane load"></div>
-        <div class="site-grid"></div>
-        <div class="road"><span></span><span></span><span></span></div>
-        <div class="signal"><i></i><i></i><i></i></div>
+      <div class="main-slide" data-slide="1">
+        <div class="portal-hero-copy">
+          <p class="workspace-kicker">Priority Control</p>
+          <h1>우선 처리 업무를 먼저 확인하세요</h1>
+          <p>${urgentLabel} · 민원 ${openComplaints.length}건 미처리 · 협의 ${openConsultations.length}건 회신 대기</p>
+          <div class="slide-actions">
+            <button class="btn light-action" data-go="/complaints">민원 확인</button>
+            <button class="btn outline light-action" data-go="/consultations">협의 확인</button>
+          </div>
+        </div>
+        <div class="slide-insight">
+          <span>Risk</span>
+          <strong>${riskCount}</strong>
+          <small>지연·마감·예산 주의 항목</small>
+        </div>
+      </div>
+      <div class="main-slide" data-slide="2">
+        <div class="portal-hero-copy">
+          <p class="workspace-kicker">Site & Budget</p>
+          <h1>현장과 예산 흐름을 한 번에 봅니다</h1>
+          <p>진행 현장 ${active}/${projectTotal} · 예산 집행률 ${budgetRate}% · 할 일 완료율 ${todoRate}%</p>
+          <div class="slide-actions">
+            <button class="btn light-action" data-go="/projects">현장 보기</button>
+            <button class="btn outline light-action" data-go="/executions">집행 보기</button>
+          </div>
+        </div>
+        <div class="slide-gauges" aria-hidden="true">
+          <i style="--value:${projectRate}%"><b>${projectRate}%</b><span>현장</span></i>
+          <i style="--value:${budgetRate}%"><b>${budgetRate}%</b><span>예산</span></i>
+          <i style="--value:${todoRate}%"><b>${todoRate}%</b><span>업무</span></i>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <button class="slider-arrow" type="button" data-slider-prev aria-label="이전 슬라이드">‹</button>
+        <div class="slider-dots" aria-label="슬라이드 선택">
+          <button class="active" type="button" data-slider-dot="0" aria-label="1번 슬라이드"></button>
+          <button type="button" data-slider-dot="1" aria-label="2번 슬라이드"></button>
+          <button type="button" data-slider-dot="2" aria-label="3번 슬라이드"></button>
+        </div>
+        <button class="slider-arrow" type="button" data-slider-next aria-label="다음 슬라이드">›</button>
       </div>
     </section>
     <section class="command-strip">
@@ -282,6 +331,27 @@ function dashboard() {
   </div>`;
   bindRouteLinks(view);
   bindPortalSearch();
+  bindMainSlider();
+}
+function bindMainSlider() {
+  const slider = $('.main-slider');
+  if (!slider) return;
+  const slides = $$('.main-slide', slider);
+  const dots = $$('[data-slider-dot]', slider);
+  let current = 0;
+  const show = (next) => {
+    current = (next + slides.length) % slides.length;
+    slides.forEach((slide, index) => slide.classList.toggle('active', index === current));
+    dots.forEach((dot, index) => dot.classList.toggle('active', index === current));
+  };
+  const restart = () => {
+    if (mainSliderTimer) clearInterval(mainSliderTimer);
+    mainSliderTimer = setInterval(() => show(current + 1), 5200);
+  };
+  $('[data-slider-prev]', slider).onclick = () => { show(current - 1); restart(); };
+  $('[data-slider-next]', slider).onclick = () => { show(current + 1); restart(); };
+  dots.forEach((dot) => dot.onclick = () => { show(Number(dot.dataset.sliderDot)); restart(); });
+  restart();
 }
 function metricCard(label, main, sub, value, tone, target) {
   return `<button class="metric-card ${tone}" data-go="${target}"><span>${esc(label)}</span><strong>${esc(main)}</strong><small>${esc(sub)}</small><div class="metric-bar"><i style="width:${pct(value)}%"></i></div></button>`;
@@ -567,44 +637,49 @@ function todos() {
   const completion = topRows.length ? Math.round(doneRows.length / topRows.length * 100) : 0;
   const monthOptions = [...new Set(cards.map(todoMonthValue))];
   const currentMonthValue = monthOptions.includes(today().slice(0, 7)) ? today().slice(0, 7) : monthOptions[0] || today().slice(0, 7);
-  view.innerHTML = `<div class="todo-os">
-    <section class="todo-os-top">
+  view.innerHTML = `<div class="todo-reference-shell">
+    <section class="todo-reference-head">
       <div>
-        <p class="workspace-kicker">Field Action OS</p>
+        <p class="workspace-kicker">Civil Work Portal</p>
         <h1>해야 할 일</h1>
-        <p>${date(today())} · 오늘 ${todayRows.length}건 · 초과 ${overdueRows.length}건 · 이번 주 ${weekRows.length}건</p>
+        <p>${date(today())} 기준 · 오늘 ${todayRows.length}건 · 지연 ${overdueRows.length}건 · 이번 주 ${weekRows.length}건</p>
       </div>
-      <button id="open-add-task" class="btn">새 할 일</button>
+      <button id="open-add-task" class="btn">새 업무</button>
     </section>
-    <section class="todo-inbox">
-      <div class="quick-icon">+</div>
-      <input id="quick-task" placeholder="예: 감만2동 공정현황 제출 내일까지">
-      <select id="quick-priority"><option value="normal">보통</option><option value="high">중요</option><option value="low">낮음</option></select>
+    <section class="todo-reference-stats">
+      <article><span>오늘 실행</span><strong>${todayRows.length}</strong><small>${date(today())}</small></article>
+      <article><span>지연 업무</span><strong>${overdueRows.length}</strong><small>즉시 확인 필요</small></article>
+      <article><span>진행중</span><strong>${openRows.length}</strong><small>미완료 전체</small></article>
+      <article><span>완료율</span><strong>${completion}%</strong><div class="progress"><span style="width:${completion}%"></span></div></article>
+    </section>
+    <section class="todo-reference-capture">
+      <input id="quick-task" placeholder="업무를 빠르게 입력하세요. 예: 공정현황 보고서 제출">
       <input id="quick-due" type="date" value="${today()}">
-      <button id="quick-add" class="btn">입력</button>
+      <select id="quick-priority"><option value="normal">보통</option><option value="high">중요</option><option value="low">낮음</option></select>
+      <button id="quick-add" class="btn">추가</button>
     </section>
-    <section class="todo-os-layout">
-      <aside class="todo-rail">
-        <button class="active" data-view="today"><span>오늘</span><strong>${todayRows.length}</strong></button>
-        <button data-view="overdue"><span>초과</span><strong>${overdueRows.length}</strong></button>
-        <button data-view="week"><span>이번 주</span><strong>${weekRows.length}</strong></button>
-        <button data-view="open"><span>진행중</span><strong>${openRows.length}</strong></button>
-        <button data-view="done"><span>완료</span><strong>${doneRows.length}</strong></button>
-        <button data-view="all"><span>전체</span><strong>${topRows.length}</strong></button>
-      </aside>
-      <main class="todo-list-shell">
-        <div class="todo-list-toolbar">
-          <div class="search"><input id="todo-query" placeholder="검색"></div>
+    <section class="todo-reference-card">
+      <div class="todo-reference-toolbar">
+        <div class="todo-filter-tabs">
+          <button class="active" data-view="today">오늘 <strong>${todayRows.length}</strong></button>
+          <button data-view="overdue">지연 <strong>${overdueRows.length}</strong></button>
+          <button data-view="week">이번 주 <strong>${weekRows.length}</strong></button>
+          <button data-view="open">진행중 <strong>${openRows.length}</strong></button>
+          <button data-view="done">완료 <strong>${doneRows.length}</strong></button>
+          <button data-view="all">전체 <strong>${topRows.length}</strong></button>
+        </div>
+        <div class="todo-reference-controls">
+          <div class="search"><input id="todo-query" placeholder="업무, 공사, 묶음 검색"></div>
           <select id="todo-month" class="control-select">${monthOptions.map((m) => `<option value="${m}" ${m === currentMonthValue ? 'selected' : ''}>${m.replace('-', '년 ')}월</option>`).join('') || `<option value="${today().slice(0, 7)}">${today().slice(0, 7).replace('-', '년 ')}월</option>`}</select>
           <select id="todo-project" class="control-select">${projectOptions().map(([id, name]) => `<option value="${esc(id ?? '')}">${esc(id ? name : '전체 공사')}</option>`).join('')}</select>
         </div>
-        <div class="todo-list-title"><div><span id="todo-list-kicker">Today</span><strong id="todo-list-heading">오늘 실행</strong></div><small id="todo-list-count"></small></div>
-        <div id="todo-action-list" class="todo-action-list"></div>
-      </main>
-      <aside class="todo-context">
-        <section class="context-card"><span>완료율</span><strong>${completion}%</strong><div class="progress"><span style="width:${completion}%"></span></div></section>
-        <section class="context-card"><span>업무 묶음</span><div id="task-groups"></div><button id="quick-plan" class="btn outline">묶음 추가</button></section>
-      </aside>
+      </div>
+      <div class="todo-reference-title"><div><span id="todo-list-kicker">Today</span><strong id="todo-list-heading">오늘 실행</strong></div><small id="todo-list-count"></small></div>
+      <div id="todo-action-list" class="todo-reference-list"></div>
+    </section>
+    <section class="todo-reference-groups">
+      <div class="todo-reference-title"><div><span>Work Sets</span><strong>업무 묶음</strong></div><button id="quick-plan" class="btn outline">묶음 추가</button></div>
+      <div id="task-groups"></div>
     </section>
   </div>`;
   const sectionTitles = [...new Set(sections.map((section) => section.title).filter(Boolean))];
@@ -683,7 +758,7 @@ function todos() {
       id ? Object.assign(old, out, { updatedAt: new Date().toISOString() }) : arr('todoItems').push({ ...out, createdAt: new Date().toISOString() });
     });
   };
-  const activeView = () => $('.todo-rail button.active')?.dataset.view || 'today';
+  const activeView = () => $('.todo-filter-tabs button.active')?.dataset.view || 'today';
   const viewLabels = {
     today: ['Today', '오늘 실행'],
     overdue: ['Overdue', '기한 초과'],
@@ -744,9 +819,8 @@ function todos() {
   const todoActionRow = (row) => {
     const { item, section, card, children, dueState } = row;
     const dueText = item.dueDate ? `${date(item.dueDate)}${dueState === 'overdue' ? ' · 초과' : dueState === 'today' ? ' · 오늘' : dueState === 'soon' ? ' · 임박' : ''}` : '기한 미정';
-    return `<article class="todo-action-row ${item.done ? 'is-done' : ''} ${dueState ? `due-${dueState}` : ''}">
+    return `<article class="todo-action-row todo-reference-row ${item.done ? 'is-done' : ''} ${dueState ? `due-${dueState}` : ''}">
       <button class="task-check" data-toggle-item="${item.id}">${item.done ? '✓' : ''}</button>
-      <div class="priority-dot ${esc(item.priority || 'normal')}"></div>
       <div class="todo-task-main">
         <div class="todo-badges">${pill(todoPriorityLabel(item.priority), todoPriorityTone(item.priority))}${item.projectId ? projectLink(item.projectId) : ''}</div>
         <strong>${esc(item.content)}</strong>
@@ -761,7 +835,7 @@ function todos() {
   $('#quick-add').onclick = () => {
     const content = $('#quick-task').value.trim();
     if (!content) return;
-    const section = sections.find((x) => x.id === Number($('#quick-section').value)) || defaultSection();
+    const section = defaultSection();
     arr('todoItems').push({ id: nextId('todoItems'), sectionId: section.id, projectId: null, level: $('#quick-due').value === today() ? 'day' : 'week', priority: $('#quick-priority').value, dueDate: $('#quick-due').value || today(), content, done: false, parentId: null, displayOrder: arr('todoItems').length + 1, createdAt: new Date().toISOString() });
     save();
     render();
@@ -769,8 +843,8 @@ function todos() {
   $('#todo-query').oninput = drawList;
   $('#todo-month').onchange = drawList;
   $('#todo-project').onchange = drawList;
-  $$('.todo-rail button').forEach((button) => button.onclick = () => {
-    $$('.todo-rail button').forEach((item) => item.classList.remove('active'));
+  $$('.todo-filter-tabs button').forEach((button) => button.onclick = () => {
+    $$('.todo-filter-tabs button').forEach((item) => item.classList.remove('active'));
     button.classList.add('active');
     drawList();
   });
