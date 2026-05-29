@@ -14,6 +14,8 @@ let selectedProject = null;
 let currentMonth = new Date(2026, 4, 1);
 let pendingFilters = {};
 let mainSliderTimer = null;
+let introShown = false;
+let introTimer = null;
 let settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{"adminName":"관리자","density":"comfortable","theme":"light"}');
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
@@ -118,6 +120,7 @@ function render() {
     clearInterval(mainSliderTimer);
     mainSliderTimer = null;
   }
+  if (route !== '/') closeIntro(true);
   const map = { '/': dashboard, '/todos': todos, '/chatbot': chatbot, '/projects': projects, '/complaints': complaints, '/consultations': consultations, '/budgets': budgets, '/executions': executions, '/schedules': schedules, '/files': files, '/contacts': contacts, '/backup': backup, '/tips': tipsPage, '/settings': settingsPage };
   (map[route] || (() => view.innerHTML = '<div class="empty">Page Not Found</div>'))();
 }
@@ -332,6 +335,55 @@ function dashboard() {
   bindRouteLinks(view);
   bindPortalSearch();
   bindMainSlider();
+  showIntro();
+}
+function showIntro() {
+  if (introShown || route !== '/' || document.querySelector('.speed-intro')) return;
+  introShown = true;
+  const intro = document.createElement('section');
+  intro.className = 'speed-intro';
+  intro.setAttribute('aria-label', '메인 인트로');
+  intro.innerHTML = `<div class="intro-skyline" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="intro-intersection" aria-hidden="true">
+      <span class="crosswalk a"></span><span class="crosswalk b"></span>
+      <div class="intro-signal"><i></i><i></i><i></i></div>
+      <div class="drift-smoke s1"></div><div class="drift-smoke s2"></div><div class="drift-smoke s3"></div>
+      <div class="drift-track t1"></div><div class="drift-track t2"></div>
+      <div class="supercar">
+        <span class="car-glow"></span><span class="car-body"></span><span class="car-cabin"></span>
+        <span class="car-nose"></span><span class="car-tail"></span><span class="wheel front"></span><span class="wheel rear"></span>
+      </div>
+    </div>
+    <div class="intro-copy">
+      <span>System Launch</span>
+      <h2>Goldbone</h2>
+      <p>도시를 가로지르는 드리프트 인트로</p>
+    </div>
+    <button class="intro-skip" type="button">건너뛰기</button>`;
+  document.body.appendChild(intro);
+  document.body.classList.add('intro-playing');
+  $('.intro-skip', intro).onclick = () => closeIntro();
+  introTimer = setTimeout(() => closeIntro(), 4700);
+}
+function closeIntro(force = false) {
+  const intro = document.querySelector('.speed-intro');
+  if (introTimer) {
+    clearTimeout(introTimer);
+    introTimer = null;
+  }
+  if (!intro) {
+    document.body.classList.remove('intro-playing');
+    return;
+  }
+  const remove = () => {
+    intro.remove();
+    document.body.classList.remove('intro-playing');
+  };
+  if (force) remove();
+  else {
+    intro.classList.add('leaving');
+    setTimeout(remove, 520);
+  }
 }
 function bindMainSlider() {
   const slider = $('.main-slider');
