@@ -1,0 +1,2672 @@
+{
+  "projects": [
+    {
+      "id": 30002,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "못골시장 일원 보행환경개선사업 효과평가용역",
+      "location": "못골시장 일원",
+      "contractor": "주식회사 경성",
+      "projectCost": 18980000,
+      "govMaterialCost": 0,
+      "budgetId": 30001,
+      "startDate": "2026-01-21",
+      "endDate": "2026-05-20",
+      "actualProgress": 80,
+      "status": "진행중",
+      "displayOrder": 2,
+      "createdAt": "2026-04-25T22:44:17.000Z",
+      "updatedAt": "2026-04-25T22:44:40.000Z"
+    },
+    {
+      "id": 30003,
+      "workKind": "공사",
+      "category": "도로",
+      "name": "문현4동 구거복개지 주거지전용주차장 조성공사",
+      "location": "문현동 838",
+      "contractor": "(주)광원",
+      "projectCost": 76542580,
+      "govMaterialCost": 9660000,
+      "budgetId": 30002,
+      "startDate": "2026-04-06",
+      "endDate": "2026-07-04",
+      "actualProgress": 30,
+      "status": "진행중",
+      "displayOrder": 3,
+      "createdAt": "2026-04-25T22:50:19.000Z",
+      "updatedAt": "2026-04-25T22:50:19.000Z"
+    },
+    {
+      "id": 30004,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "문현4동 구거복개지 주거지전용주차장 조성공사 폐기물처리용역",
+      "location": "문현동 838",
+      "contractor": "(주)두승",
+      "projectCost": 46819000,
+      "govMaterialCost": 0,
+      "budgetId": 30002,
+      "startDate": "2026-04-06",
+      "endDate": "2026-07-04",
+      "actualProgress": 60,
+      "status": "진행중",
+      "displayOrder": 4,
+      "createdAt": "2026-04-25T22:51:53.000Z",
+      "updatedAt": "2026-04-25T22:51:53.000Z"
+    },
+    {
+      "id": 30005,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "문현4동 공영주차장 건축물해체계획서 작성용역",
+      "location": "문현동 838",
+      "contractor": "맥이엔지건축사사무소",
+      "projectCost": 2508000,
+      "govMaterialCost": 0,
+      "budgetId": 30002,
+      "startDate": "2026-01-28",
+      "endDate": "2026-03-28",
+      "actualProgress": 100,
+      "status": "준공",
+      "displayOrder": 5,
+      "createdAt": "2026-04-25T23:12:09.000Z",
+      "updatedAt": "2026-04-25T23:12:09.000Z"
+    },
+    {
+      "id": 30006,
+      "workKind": "공사",
+      "category": "도로",
+      "name": "감만2동 제3공영주차장 조성공사",
+      "location": "감만2동 29-122번지 일원",
+      "contractor": "수안종합건설 주식회사",
+      "projectCost": 1142269560,
+      "govMaterialCost": 289050470,
+      "budgetId": 30003,
+      "startDate": "2026-01-23",
+      "endDate": "2026-10-19",
+      "actualProgress": 11,
+      "status": "진행중",
+      "displayOrder": 6,
+      "createdAt": "2026-04-25T23:45:24.000Z",
+      "updatedAt": "2026-04-25T23:45:24.000Z"
+    },
+    {
+      "id": 30007,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "감만2동 제3공영주차장 조성공사 폐기물처리용역",
+      "location": "감만2동 29-122번지 일원",
+      "contractor": "유승건기산업",
+      "projectCost": 100150000,
+      "govMaterialCost": 0,
+      "budgetId": 30003,
+      "startDate": "2026-01-23",
+      "endDate": "2026-10-19",
+      "actualProgress": 50,
+      "status": "진행중",
+      "displayOrder": 7,
+      "createdAt": "2026-04-25T23:46:26.000Z",
+      "updatedAt": "2026-04-26T01:00:19.000Z"
+    },
+    {
+      "id": 30008,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "감만2동 제3공영주차장 조성공사 재해예방기술지도용역",
+      "location": "감만2동 29-122번지 일원",
+      "contractor": "(주)나라안전기술단",
+      "projectCost": 3762000,
+      "govMaterialCost": 0,
+      "budgetId": 30003,
+      "startDate": "2026-01-23",
+      "endDate": "2026-10-19",
+      "actualProgress": 11,
+      "status": "진행중",
+      "displayOrder": 8,
+      "createdAt": "2026-04-25T23:47:41.000Z",
+      "updatedAt": "2026-04-25T23:47:41.000Z"
+    },
+    {
+      "id": 30009,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "감만2동 제3공영주차장 조성공사 건축물 해체계획서 작성용역",
+      "location": "감만2동 29-122번지 일원",
+      "contractor": "아키시스건축사사무소",
+      "projectCost": 9700000,
+      "govMaterialCost": 0,
+      "budgetId": 30003,
+      "startDate": "2025-10-30",
+      "endDate": "2026-01-30",
+      "actualProgress": 100,
+      "status": "준공",
+      "displayOrder": 9,
+      "createdAt": "2026-04-25T23:51:44.000Z",
+      "updatedAt": "2026-04-25T23:51:44.000Z"
+    },
+    {
+      "id": 30010,
+      "workKind": "공사",
+      "category": "도로",
+      "name": "감만2동 제3공영주차장 석면해체공사",
+      "location": "감만2동29-122번지 일원",
+      "contractor": "신창건영(주)",
+      "projectCost": 16276000,
+      "govMaterialCost": 0,
+      "budgetId": 30003,
+      "startDate": "2025-12-01",
+      "endDate": "2026-01-22",
+      "actualProgress": 100,
+      "status": "준공",
+      "displayOrder": 10,
+      "createdAt": "2026-04-26T00:00:11.000Z",
+      "updatedAt": "2026-04-26T00:00:11.000Z"
+    },
+    {
+      "id": 30011,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "감만2동 제3공영주차장 석면해체공사 지정폐기물처리용역",
+      "location": "감만2동 29-122번지 일원",
+      "contractor": "(주)덕산산업",
+      "projectCost": 5244000,
+      "govMaterialCost": 0,
+      "budgetId": 30003,
+      "startDate": "2025-12-01",
+      "endDate": "2026-01-22",
+      "actualProgress": 100,
+      "status": "준공",
+      "displayOrder": 11,
+      "createdAt": "2026-04-26T00:03:03.000Z",
+      "updatedAt": "2026-04-26T00:03:03.000Z"
+    },
+    {
+      "id": 30012,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "감만2동 제3공영주차장 조성공사 감독권한대행 등 건설사업관리용역",
+      "location": "감만2동 29-122번지 일원",
+      "contractor": "(주)부산건축종합건축사사무소",
+      "projectCost": 212710000,
+      "govMaterialCost": 0,
+      "budgetId": 30004,
+      "startDate": "2026-01-02",
+      "endDate": "2026-12-01",
+      "actualProgress": 11,
+      "status": "진행중",
+      "displayOrder": 12,
+      "createdAt": "2026-04-26T00:06:35.000Z",
+      "updatedAt": "2026-04-26T00:06:35.000Z"
+    },
+    {
+      "id": 30013,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "우암동 도시숲 공영주차장 조성 기본 및 실시설계용역",
+      "location": "우암동 127-31 일원",
+      "contractor": "(주)관보종합기술단",
+      "projectCost": 173913000,
+      "govMaterialCost": 0,
+      "budgetId": 30005,
+      "startDate": "2025-04-28",
+      "endDate": "2026-05-23",
+      "actualProgress": 75,
+      "status": "중지",
+      "displayOrder": 13,
+      "createdAt": "2026-04-26T00:15:08.000Z",
+      "updatedAt": "2026-04-27T08:06:16.000Z"
+    },
+    {
+      "id": 30014,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "우암동 도시숲 공영주차장 조성사업 설계안전성 검토용역",
+      "location": "부산 남구 우암동 127-31",
+      "contractor": "(주)대농구조안전연구소",
+      "projectCost": 18800000,
+      "govMaterialCost": 0,
+      "budgetId": 30005,
+      "startDate": "2026-04-08",
+      "endDate": "2026-06-06",
+      "actualProgress": 50,
+      "status": "진행중",
+      "displayOrder": 14,
+      "createdAt": "2026-04-26T00:16:44.000Z",
+      "updatedAt": "2026-04-26T22:55:00.000Z"
+    },
+    {
+      "id": 30015,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "우암동 도시숲 공영주차장 조성사업 건축물해체계획서 작성용역",
+      "location": "부산 남구 우암동 127-31",
+      "contractor": "아키시스 건축사사무소",
+      "projectCost": 6650000,
+      "govMaterialCost": 0,
+      "budgetId": 30005,
+      "startDate": "2026-04-08",
+      "endDate": "2026-06-06",
+      "actualProgress": 30,
+      "status": "진행중",
+      "displayOrder": 15,
+      "createdAt": "2026-04-26T00:18:04.000Z",
+      "updatedAt": "2026-04-26T00:18:04.000Z"
+    },
+    {
+      "id": 30016,
+      "workKind": "용역",
+      "category": "기타",
+      "name": "감만2동 제3공영주차장 지반조사용역",
+      "location": "감만2동29-122번지 일원",
+      "contractor": "(주)동방이엔지",
+      "projectCost": 7300000,
+      "govMaterialCost": 0,
+      "budgetId": null,
+      "startDate": "2026-04-03",
+      "endDate": "2026-05-02",
+      "actualProgress": 100,
+      "status": "준공",
+      "displayOrder": 16,
+      "createdAt": "2026-04-26T00:19:49.000Z",
+      "updatedAt": "2026-05-11T23:54:43.000Z"
+    },
+    {
+      "id": 30017,
+      "workKind": "용역",
+      "category": "도로",
+      "name": "2026년 교통체계 개선공사 실시설계용역",
+      "location": "문현지역아동센터, 감만사거리",
+      "contractor": "(주)하나기술단",
+      "projectCost": 20870000,
+      "govMaterialCost": 0,
+      "budgetId": 30007,
+      "startDate": "2026-03-05",
+      "endDate": "2026-06-02",
+      "actualProgress": 50,
+      "status": "진행중",
+      "displayOrder": 17,
+      "createdAt": "2026-04-26T00:45:53.000Z",
+      "updatedAt": "2026-04-26T00:45:53.000Z"
+    }
+  ],
+  "linkedProjects": [
+    {
+      "id": 1,
+      "projectId": 30003,
+      "linkedProjectId": 30004,
+      "isRepresentative": false
+    },
+    {
+      "id": 2,
+      "projectId": 30004,
+      "linkedProjectId": 30003,
+      "isRepresentative": false
+    },
+    {
+      "id": 3,
+      "projectId": 30005,
+      "linkedProjectId": 30003,
+      "isRepresentative": true
+    },
+    {
+      "id": 4,
+      "projectId": 30003,
+      "linkedProjectId": 30005,
+      "isRepresentative": false
+    },
+    {
+      "id": 7,
+      "projectId": 30006,
+      "linkedProjectId": 30007,
+      "isRepresentative": false
+    },
+    {
+      "id": 8,
+      "projectId": 30007,
+      "linkedProjectId": 30006,
+      "isRepresentative": true
+    },
+    {
+      "id": 9,
+      "projectId": 30006,
+      "linkedProjectId": 30008,
+      "isRepresentative": false
+    },
+    {
+      "id": 10,
+      "projectId": 30008,
+      "linkedProjectId": 30006,
+      "isRepresentative": false
+    },
+    {
+      "id": 11,
+      "projectId": 30009,
+      "linkedProjectId": 30006,
+      "isRepresentative": false
+    },
+    {
+      "id": 12,
+      "projectId": 30006,
+      "linkedProjectId": 30009,
+      "isRepresentative": false
+    },
+    {
+      "id": 13,
+      "projectId": 30010,
+      "linkedProjectId": 30006,
+      "isRepresentative": false
+    },
+    {
+      "id": 14,
+      "projectId": 30006,
+      "linkedProjectId": 30010,
+      "isRepresentative": false
+    },
+    {
+      "id": 17,
+      "projectId": 30011,
+      "linkedProjectId": 30006,
+      "isRepresentative": false
+    },
+    {
+      "id": 18,
+      "projectId": 30006,
+      "linkedProjectId": 30011,
+      "isRepresentative": false
+    },
+    {
+      "id": 19,
+      "projectId": 30011,
+      "linkedProjectId": 30010,
+      "isRepresentative": false
+    },
+    {
+      "id": 20,
+      "projectId": 30010,
+      "linkedProjectId": 30011,
+      "isRepresentative": false
+    },
+    {
+      "id": 23,
+      "projectId": 30012,
+      "linkedProjectId": 30006,
+      "isRepresentative": true
+    },
+    {
+      "id": 24,
+      "projectId": 30006,
+      "linkedProjectId": 30012,
+      "isRepresentative": true
+    },
+    {
+      "id": 25,
+      "projectId": 30014,
+      "linkedProjectId": 30013,
+      "isRepresentative": true
+    },
+    {
+      "id": 26,
+      "projectId": 30013,
+      "linkedProjectId": 30014,
+      "isRepresentative": false
+    },
+    {
+      "id": 27,
+      "projectId": 30015,
+      "linkedProjectId": 30013,
+      "isRepresentative": false
+    },
+    {
+      "id": 28,
+      "projectId": 30013,
+      "linkedProjectId": 30015,
+      "isRepresentative": false
+    },
+    {
+      "id": 29,
+      "projectId": 30016,
+      "linkedProjectId": 30006,
+      "isRepresentative": false
+    },
+    {
+      "id": 30,
+      "projectId": 30006,
+      "linkedProjectId": 30016,
+      "isRepresentative": true
+    }
+  ],
+  "linkedWorks": [],
+  "projectCompanies": [
+    {
+      "id": 1,
+      "projectId": 30002,
+      "type": "설계사",
+      "name": "주식회사 경성",
+      "manager": "정연광이사님",
+      "phone": "010-8510-9863",
+      "email": "",
+      "createdAt": "2026-04-25T22:45:27.000Z"
+    },
+    {
+      "id": 2,
+      "projectId": 30003,
+      "type": "시공사",
+      "name": "(주) 광원",
+      "manager": "전창훈 소장",
+      "phone": "010-7799-5555",
+      "email": "",
+      "createdAt": "2026-04-25T22:50:50.000Z"
+    },
+    {
+      "id": 30001,
+      "projectId": 30012,
+      "type": "감리사",
+      "name": "(주)부산건축종합건축사사무소",
+      "manager": "이승우 본부장 (토목분야 기술지원)",
+      "phone": "010-2328-9623",
+      "email": "",
+      "createdAt": "2026-04-26T22:56:55.000Z"
+    },
+    {
+      "id": 30002,
+      "projectId": 30012,
+      "type": "감리사",
+      "name": "(주)부산건축종합건축사사무소",
+      "manager": "송기용 상무 (건설사업관리책임기술자)",
+      "phone": "010-2577-5611",
+      "email": "",
+      "createdAt": "2026-04-26T22:57:42.000Z"
+    },
+    {
+      "id": 30003,
+      "projectId": 30006,
+      "type": "시공사",
+      "name": "수안종합건설 주식회사",
+      "manager": "이석민 본부장 (소장)",
+      "phone": "010-9378-3754",
+      "email": "",
+      "createdAt": "2026-04-26T23:10:31.000Z"
+    },
+    {
+      "id": 60001,
+      "projectId": 30006,
+      "type": "기타",
+      "name": "청담건설 소장",
+      "manager": "이영철",
+      "phone": "010-5055-5983",
+      "email": "",
+      "createdAt": "2026-05-04T02:49:48.000Z"
+    }
+  ],
+  "projectMemos": [
+    {
+      "id": 1,
+      "projectId": 30003,
+      "content": "벽 허물고, 바닥 다 긁었고, 횟집앞에 포장 긁어내고있음. \n램프관련해서",
+      "createdAt": "2026-04-27T00:17:32.000Z"
+    },
+    {
+      "id": 30001,
+      "projectId": 30013,
+      "content": "과업지시서 상에는 BF 인증등급 일반등급이상, 우리가 우수등급을 받으려면 한층에 화장실 남녀가 함께 있어야 하는데, 그러면 면적이 너무 커져서 우리는 밑에층이 남자, 위에층이 여자해서 했고, 오늘 관보에서 BF 부분이 반영이 잘못되어있던 부분 (횡단보도가 꺾이거나, 전기차 충전소 - 장애인용 전기차 충전소가 하나 더 있어야함, 무인사전정산기 장애인들이 상용할 수 있도록 높이 조정 필요)",
+      "createdAt": "2026-04-27T08:05:58.000Z"
+    },
+    {
+      "id": 60001,
+      "projectId": 30013,
+      "content": "2026.4.29. (수) 14:00 사무실 회의",
+      "createdAt": "2026-04-29T06:45:34.000Z"
+    },
+    {
+      "id": 90001,
+      "projectId": 30017,
+      "content": "2026.5.13.(수) ~ 2026.5.14.(목) 정도에 설계완료됨.",
+      "createdAt": "2026-05-11T00:05:43.000Z"
+    },
+    {
+      "id": 90003,
+      "projectId": 30002,
+      "content": "현재 25년 교통사고 현황이 업데이트가 되지않아 보고서가 완료되지 않고있음.\nTASS에 연락 후 말씀해주시기로 함.",
+      "createdAt": "2026-05-11T00:07:24.000Z"
+    },
+    {
+      "id": 90004,
+      "projectId": 30002,
+      "content": "2026.5.15.(금)에 교통사고 현황자료는 업데이트 될 예정, 나머지는 보고서 블로그에 올림",
+      "createdAt": "2026-05-11T00:21:08.000Z"
+    }
+  ],
+  "complaints": [
+    {
+      "id": 60001,
+      "type": "전화민원",
+      "processStatus": "접수",
+      "complainant": "미상",
+      "phone": "010-8471-9205",
+      "address": "수영로 298번길 일방통행 지정관련",
+      "title": "수영로 298번길 일방통행 지정관련",
+      "content": "수영로 298번길 일방통행 지정관련 (팀장님 전달건)",
+      "receivedDate": "2026-04-27",
+      "dueDate": "",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-04-27T07:28:36.000Z",
+      "updatedAt": "2026-04-27T07:28:36.000Z"
+    },
+    {
+      "id": 90001,
+      "type": "전화민원",
+      "processStatus": "처리완료",
+      "complainant": "미상",
+      "phone": "010-3861-6928",
+      "address": "못골시장 착한고깃간 일원",
+      "title": "못골시장 착한고깃간 일원 요철으로 넘어짐 발생",
+      "content": "못골시장 착한고깃간 일원 요철으로 넘어짐 발생",
+      "receivedDate": "2026-04-28",
+      "dueDate": "",
+      "projectId": null,
+      "memo": "건설과 굴착구간 처리완료",
+      "createdAt": "2026-04-28T08:19:27.000Z",
+      "updatedAt": "2026-05-04T06:13:05.000Z"
+    },
+    {
+      "id": 120002,
+      "type": "전화민원",
+      "processStatus": "처리완료",
+      "complainant": "10번버스기사",
+      "phone": "010-4563-4427",
+      "address": "용소로 18",
+      "title": "용소로 18 일원 황색신호 연장요청",
+      "content": "",
+      "receivedDate": "2026-05-04",
+      "dueDate": "",
+      "projectId": null,
+      "memo": "경찰서 공문송부",
+      "createdAt": "2026-05-04T06:08:41.000Z",
+      "updatedAt": "2026-05-04T06:08:41.000Z"
+    },
+    {
+      "id": 150001,
+      "type": "전화민원",
+      "processStatus": "접수",
+      "complainant": "미상",
+      "phone": "010-5384-7669",
+      "address": "미륭레미콘 앞 ",
+      "title": "동국자동차정비 앞 회전교차로 ",
+      "content": "차선 줄어듬 표지 ",
+      "receivedDate": "2026-05-08",
+      "dueDate": "",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-08T06:37:28.000Z",
+      "updatedAt": "2026-05-08T06:37:28.000Z"
+    }
+  ],
+  "consultations": [
+    {
+      "id": 30001,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "사전타당성 검토 관련 재협의[(가칭)용호B구역 재개발]",
+      "department": "건축과-9575",
+      "manager": "이미연",
+      "phone": "051-607-4611",
+      "requestDate": "2026-03-25",
+      "dueDate": "2026-04-24",
+      "replyDate": "2026-04-27",
+      "projectId": null,
+      "content": "제출된 조치계획에 대한 관련 부서 소관사항",
+      "result": "",
+      "memo": "",
+      "createdAt": "2026-04-25T23:02:18.000Z",
+      "updatedAt": "2026-04-27T07:54:46.000Z"
+    },
+    {
+      "id": 30002,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "용호11구역 재개발사업 정비계획 결정 및 정비구역 지정",
+      "department": "건축과-11338",
+      "manager": "이미연",
+      "phone": "607-4611",
+      "requestDate": "2026-04-08",
+      "dueDate": "2026-05-15",
+      "replyDate": "",
+      "projectId": null,
+      "content": "○ 「도시교통정비 촉진법」에 따른 교통영향평가 대상여부 및 교통처리계획 등 기타 소관사항\n○ 「도시ㆍ군계획시설의 결정ㆍ구조 및 설치기준에 관한 규칙」 제3조에 따라 중복결정 계획중인 도시계획시설(주차장) 설치·관리 등에 대한 적합 여부 등 관련 소관사항\n○ 정비구역 내 주거지전용주차장 포함여부 등 기타 소관사항",
+      "result": "의견없음",
+      "memo": "",
+      "createdAt": "2026-04-25T23:03:43.000Z",
+      "updatedAt": "2026-05-14T08:31:09.000Z"
+    },
+    {
+      "id": 30003,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "교통개선대책 변경신고 (문현동 821번지 일원)",
+      "department": "건축과-12686",
+      "manager": "박예빈",
+      "phone": "607-4604",
+      "requestDate": "2026-04-17",
+      "dueDate": "2026-04-28",
+      "replyDate": "2026-04-28",
+      "projectId": null,
+      "content": "교통영향평가 변경신고 적정여부 등 소관사항",
+      "result": "협의완료",
+      "memo": "",
+      "createdAt": "2026-04-25T23:05:14.000Z",
+      "updatedAt": "2026-04-28T07:52:48.000Z"
+    },
+    {
+      "id": 30004,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "주택건설사업계획승인 신청에 따른 협의(문현동 821)",
+      "department": "건축과-12685",
+      "manager": "박예빈",
+      "phone": "607-4604",
+      "requestDate": "2026-04-17",
+      "dueDate": "2026-04-28",
+      "replyDate": "2026-04-28",
+      "projectId": null,
+      "content": " ｢도시교통정비 촉진법｣에 따른 교통영향평가 변경심의 대상여부 및 교통처리계획 적정여부 등 기타 소관사항\n• ｢주차장법｣에 따른 부설주차장(자전거 주차장 포함) 설치계획 적정여부 등 기타 소관사항\n• ｢교통안전법｣에 의한 교통안전시설 설치계획 적정여부 등 소관사항",
+      "result": "보완요청 [교통영향평가 반영필요]",
+      "memo": "",
+      "createdAt": "2026-04-25T23:06:26.000Z",
+      "updatedAt": "2026-04-28T07:53:12.000Z"
+    },
+    {
+      "id": 30005,
+      "type": "기관협의",
+      "status": "회신완료",
+      "title": "2026년 5월말 기준 지자체 발주공사 주요 공정현황 등 제출요청",
+      "department": "시 일자리노동과-5116",
+      "manager": "여예린",
+      "phone": "888-6431",
+      "requestDate": "2026-04-22",
+      "dueDate": "2026-04-24",
+      "replyDate": "2026-04-27",
+      "projectId": 30006,
+      "content": "노동안전보건지킴이단 점검대상지 선정을 위한 지자체 발주공사 주요 공정 제출",
+      "result": "공정현황 회신",
+      "memo": "",
+      "createdAt": "2026-04-25T23:08:56.000Z",
+      "updatedAt": "2026-04-26T23:16:44.000Z"
+    },
+    {
+      "id": 60002,
+      "type": "기관협의",
+      "status": "회신완료",
+      "title": "2027년 안전한 보행환경조성사업 수요조사 계획 알림",
+      "department": "도로안전과-2515",
+      "manager": "남미선",
+      "phone": "051-888-1354",
+      "requestDate": "2026-04-23",
+      "dueDate": "2026-06-30",
+      "replyDate": "",
+      "projectId": null,
+      "content": "보행교통사고 다발지역 등 사업대상지 발굴",
+      "result": "대상지없음",
+      "memo": "",
+      "createdAt": "2026-04-26T23:19:56.000Z",
+      "updatedAt": "2026-05-12T06:37:07.000Z"
+    },
+    {
+      "id": 90001,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "주택건설사업계획변경승인 신청(문현동 296-1번지 일원)",
+      "department": "건축과-13751",
+      "manager": "원나영",
+      "phone": "607-4602",
+      "requestDate": "2026-04-27",
+      "dueDate": "2026-05-08",
+      "replyDate": "2026-05-07",
+      "projectId": null,
+      "content": "「도시교통정비 촉진법」에 따른 교통영향평가 변경심의(신고) 대상 여부 및 교통처리계획 적정 여부 등",
+      "result": "보완요청",
+      "memo": "",
+      "createdAt": "2026-04-27T12:42:51.000Z",
+      "updatedAt": "2026-05-07T09:06:24.000Z"
+    },
+    {
+      "id": 120001,
+      "type": "기관협의",
+      "status": "회신완료",
+      "title": "2026년 교통체계개선사업 실시설계에 따른 의견협의",
+      "department": "협의기관 다수",
+      "manager": "진성훈",
+      "phone": "607-4852",
+      "requestDate": "2026-04-24",
+      "dueDate": "2026-05-07",
+      "replyDate": "",
+      "projectId": 30017,
+      "content": "공문참조",
+      "result": "협의완료 - 하나기술단 통보",
+      "memo": "교통정책과-13805(2026.4.24.)",
+      "createdAt": "2026-04-28T11:52:00.000Z",
+      "updatedAt": "2026-05-08T00:07:16.000Z"
+    },
+    {
+      "id": 150001,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "행위허가(철거 및 증설) 용호동197번지",
+      "department": "건축과-14151",
+      "manager": "박예빈",
+      "phone": "607-4604",
+      "requestDate": "2026-04-30",
+      "dueDate": "2026-05-04",
+      "replyDate": "2026-05-04",
+      "projectId": null,
+      "content": "주차차단기 설치계획 적정여부 등 기타 소관사항",
+      "result": "별도의견없음",
+      "memo": "",
+      "createdAt": "2026-05-04T00:02:58.000Z",
+      "updatedAt": "2026-05-04T05:51:46.000Z"
+    },
+    {
+      "id": 180002,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "교통개선대책 변경신고에 따른 의견협의(문현동 295-1번지 일원)",
+      "department": "건축과-14389",
+      "manager": "원나영",
+      "phone": "607-4602",
+      "requestDate": "2026-05-04",
+      "dueDate": "2026-05-08",
+      "replyDate": "2026-05-07",
+      "projectId": null,
+      "content": "교통개선대책 변경신고 ",
+      "result": "별도의견없음",
+      "memo": "",
+      "createdAt": "2026-05-04T07:44:21.000Z",
+      "updatedAt": "2026-05-07T09:05:39.000Z"
+    },
+    {
+      "id": 210001,
+      "type": "기관협의",
+      "status": "협의중",
+      "title": "도시관리계획(황령산유원지 조성계획)변경결정",
+      "department": "시 공원여가정책과-5773",
+      "manager": "이봉섭",
+      "phone": "051-888-3825",
+      "requestDate": "2026-05-04",
+      "dueDate": "2026-06-05",
+      "replyDate": "",
+      "projectId": null,
+      "content": "",
+      "result": "",
+      "memo": "도시관리계획변경 총괄 : (주)정림이엔씨 박수홍이사(055-355-0910)",
+      "createdAt": "2026-05-04T08:54:52.000Z",
+      "updatedAt": "2026-05-04T08:54:52.000Z"
+    },
+    {
+      "id": 240001,
+      "type": "기관협의",
+      "status": "협의중",
+      "title": "도시계획시설사업(황령산유원지중로3-198호선 확포장공사) 실시계획인가 신청",
+      "department": "시 공원여가정책과-5779",
+      "manager": "이봉섭",
+      "phone": "051-888-3825",
+      "requestDate": "2026-05-04",
+      "dueDate": "2026-06-05",
+      "replyDate": "",
+      "projectId": null,
+      "content": "교통안전시설물 등 검토의견\n교통영향평가, 교통체계 개선 관련 종합의견\n로프웨이 궤도 설비기준 노선 적정여부 등에 관한 사항\n기타 소관사항",
+      "result": "",
+      "memo": "",
+      "createdAt": "2026-05-06T04:16:29.000Z",
+      "updatedAt": "2026-05-06T04:16:29.000Z"
+    },
+    {
+      "id": 240002,
+      "type": "기관협의",
+      "status": "협의중",
+      "title": "도시계획시설(황령산유원지 봉수전망대 조성사업(로프웨이2단계)] 실시계획인가 신청에 따른 의견협의",
+      "department": "시 공공여가정책과-5780",
+      "manager": "이봉섭",
+      "phone": "051-888-3825",
+      "requestDate": "2026-05-04",
+      "dueDate": "2026-06-05",
+      "replyDate": "",
+      "projectId": null,
+      "content": "◦교통안전시설물 등 검토의견\n◦교통영향평가, 교통체계 개선 관련 종합적인 검토의견\n◦로프웨이(궤도) 설비기준 및 노선적정여부 등에 관한 사항\n◦기타 소관사항",
+      "result": "",
+      "memo": "",
+      "createdAt": "2026-05-06T04:18:06.000Z",
+      "updatedAt": "2026-05-06T04:18:06.000Z"
+    },
+    {
+      "id": 240003,
+      "type": "기관협의",
+      "status": "협의중",
+      "title": "황령산유원지 로프웨이(2단계)조성사업 환경영향평가 초안 공람 및 의견 제출 협조요청",
+      "department": "환경위생과",
+      "manager": "천영현",
+      "phone": "051-607-4393",
+      "requestDate": "2026-05-06",
+      "dueDate": "2026-06-16",
+      "replyDate": "",
+      "projectId": null,
+      "content": "초안 관련 의견 협의",
+      "result": "",
+      "memo": "",
+      "createdAt": "2026-05-06T04:19:35.000Z",
+      "updatedAt": "2026-05-06T04:19:35.000Z"
+    },
+    {
+      "id": 270001,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "행위허가(증설)사용검사 신청 (용호동 176-30번지 일원)",
+      "department": "건축과-14871",
+      "manager": "박예빈",
+      "phone": "051-607-4604",
+      "requestDate": "2026-05-08",
+      "dueDate": "2026-05-15",
+      "replyDate": "",
+      "projectId": null,
+      "content": "주차 차단기 설치 적정여부",
+      "result": "별도의견없음",
+      "memo": "",
+      "createdAt": "2026-05-11T00:02:29.000Z",
+      "updatedAt": "2026-05-12T06:36:47.000Z"
+    },
+    {
+      "id": 300001,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "주택건설사업계획변경승인 신청 의견 재협의(문현동 295-1번지 일원)",
+      "department": "건축과-15162",
+      "manager": "원나영",
+      "phone": "051-607-4602",
+      "requestDate": "2026-05-11",
+      "dueDate": "2026-05-12",
+      "replyDate": "2026-05-12",
+      "projectId": null,
+      "content": "교통영향평가 반영 적정여부 등 소관사항",
+      "result": "별도의견없음",
+      "memo": "",
+      "createdAt": "2026-05-12T06:36:25.000Z",
+      "updatedAt": "2026-05-12T06:36:38.000Z"
+    },
+    {
+      "id": 300002,
+      "type": "내부협의",
+      "status": "회신완료",
+      "title": "사전타당성 검토신청에 대한 재협의(우암7구역)",
+      "department": "건축과-15297",
+      "manager": "이동기",
+      "phone": "051-607-4615",
+      "requestDate": "2026-05-12",
+      "dueDate": "2026-05-20",
+      "replyDate": "2026-05-14",
+      "projectId": null,
+      "content": "교통처리계획(안)에 대한 의견 등 기타소관사항 ",
+      "result": "의견없음",
+      "memo": "",
+      "createdAt": "2026-05-12T06:38:36.000Z",
+      "updatedAt": "2026-05-14T08:30:58.000Z"
+    }
+  ],
+  "budgets": [
+    {
+      "id": 30001,
+      "name": "관내 보행환경개선사업 효과평가용역",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "2026년 본예산",
+      "createdAt": "2026-04-25T22:42:56.000Z",
+      "updatedAt": "2026-04-25T22:42:56.000Z"
+    },
+    {
+      "id": 30002,
+      "name": "문현4동 구거복개지 공영주차장 조성",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "",
+      "createdAt": "2026-04-25T22:48:38.000Z",
+      "updatedAt": "2026-04-25T22:48:38.000Z"
+    },
+    {
+      "id": 30003,
+      "name": "감만2동 제3공영주차장 조성(시설비)",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "",
+      "createdAt": "2026-04-25T23:22:44.000Z",
+      "updatedAt": "2026-04-25T23:22:44.000Z"
+    },
+    {
+      "id": 30004,
+      "name": "감만2동 제3공영주차장 조성(감리비)",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "",
+      "createdAt": "2026-04-25T23:23:35.000Z",
+      "updatedAt": "2026-04-25T23:23:35.000Z"
+    },
+    {
+      "id": 30005,
+      "name": "우암동 도시숲 공영주차장 조성",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "",
+      "createdAt": "2026-04-26T00:12:42.000Z",
+      "updatedAt": "2026-04-26T00:12:42.000Z"
+    },
+    {
+      "id": 30006,
+      "name": "교통사고 잦은 곳 개선사업",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "",
+      "createdAt": "2026-04-26T00:23:27.000Z",
+      "updatedAt": "2026-04-26T00:23:42.000Z"
+    },
+    {
+      "id": 30007,
+      "name": "교통정체구간 체계개선(TSM)",
+      "year": "2026",
+      "department": "교통정책과",
+      "memo": "市 재배정 (교통혁신과)",
+      "createdAt": "2026-04-26T00:24:27.000Z",
+      "updatedAt": "2026-04-26T00:24:27.000Z"
+    }
+  ],
+  "budgetParts": [
+    {
+      "id": 30001,
+      "budgetId": 30001,
+      "source": "구비",
+      "carryover": "당해",
+      "amount": 20000000
+    },
+    {
+      "id": 30002,
+      "budgetId": 30002,
+      "source": "구비",
+      "carryover": "당해",
+      "amount": 150000000
+    },
+    {
+      "id": 30003,
+      "budgetId": 30003,
+      "source": "국비",
+      "carryover": "사고",
+      "amount": 866479560
+    },
+    {
+      "id": 30004,
+      "budgetId": 30003,
+      "source": "시비",
+      "carryover": "사고",
+      "amount": 608879840
+    },
+    {
+      "id": 30005,
+      "budgetId": 30003,
+      "source": "구비",
+      "carryover": "명시",
+      "amount": 11862000
+    },
+    {
+      "id": 30006,
+      "budgetId": 30003,
+      "source": "구비",
+      "carryover": "사고",
+      "amount": 449284910
+    },
+    {
+      "id": 30007,
+      "budgetId": 30004,
+      "source": "국비",
+      "carryover": "사고",
+      "amount": 115000000
+    },
+    {
+      "id": 30008,
+      "budgetId": 30004,
+      "source": "구비",
+      "carryover": "명시",
+      "amount": 33138000
+    },
+    {
+      "id": 30009,
+      "budgetId": 30004,
+      "source": "구비",
+      "carryover": "사고",
+      "amount": 76922200
+    },
+    {
+      "id": 30010,
+      "budgetId": 30005,
+      "source": "구비",
+      "carryover": "당해",
+      "amount": 2015708000
+    },
+    {
+      "id": 30011,
+      "budgetId": 30005,
+      "source": "구비",
+      "carryover": "사고",
+      "amount": 52173900
+    },
+    {
+      "id": 30014,
+      "budgetId": 30006,
+      "source": "시비",
+      "carryover": "당해",
+      "amount": 285000000
+    },
+    {
+      "id": 30015,
+      "budgetId": 30007,
+      "source": "시비",
+      "carryover": "당해",
+      "amount": 200000000
+    }
+  ],
+  "executions": [
+    {
+      "id": 60001,
+      "fiscalYear": "2025",
+      "execDate": "2026-03-25",
+      "date": "2026-03-25",
+      "budgetId": 30001,
+      "budgetPartId": null,
+      "projectId": 30002,
+      "title": "선금",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 9490000,
+      "vendor": "(주)경성",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-25T22:47:04.000Z",
+      "updatedAt": "2026-04-25T22:47:23.000Z"
+    },
+    {
+      "id": 60002,
+      "fiscalYear": "2025",
+      "execDate": "2026-04-03",
+      "date": "2026-04-03",
+      "budgetId": 30002,
+      "budgetPartId": null,
+      "projectId": 30005,
+      "title": "문현4동 공영주차장 건축물해체계획서 작성용역 준공금",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 2508000,
+      "vendor": "맥이엔지 건축사사무소",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-25T23:14:08.000Z",
+      "updatedAt": "2026-04-25T23:14:08.000Z"
+    },
+    {
+      "id": 60003,
+      "fiscalYear": "2025",
+      "execDate": "2026-01-29",
+      "date": "2026-01-29",
+      "budgetId": 30003,
+      "budgetPartId": null,
+      "projectId": 30009,
+      "title": "감만2동 제3공영주차장 조성공사 건축물 해체계획서 작성용역",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 9700000,
+      "vendor": "아키시스건축사사무",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-25T23:53:46.000Z",
+      "updatedAt": "2026-04-25T23:53:46.000Z"
+    },
+    {
+      "id": 60004,
+      "fiscalYear": "2025",
+      "execDate": "2026-01-30",
+      "date": "2026-01-30",
+      "budgetId": 30003,
+      "budgetPartId": null,
+      "projectId": null,
+      "title": "감만2동 제3공영주차장 석면해체공사",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 16276000,
+      "vendor": "신창건영(주)",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-26T00:01:27.000Z",
+      "updatedAt": "2026-04-26T00:01:27.000Z"
+    },
+    {
+      "id": 60005,
+      "fiscalYear": "2025",
+      "execDate": "2026-01-29",
+      "date": "2026-01-29",
+      "budgetId": 30003,
+      "budgetPartId": null,
+      "projectId": 30011,
+      "title": "감만2동 제3공영주차장 석면해체공사 폐기물처리용역",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 5244000,
+      "vendor": "(주)덕산산업",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-26T00:04:23.000Z",
+      "updatedAt": "2026-04-26T00:04:23.000Z"
+    },
+    {
+      "id": 60006,
+      "fiscalYear": "2026",
+      "execDate": "2026-01-29",
+      "date": "2026-01-29",
+      "budgetId": 30003,
+      "budgetPartId": null,
+      "projectId": 30007,
+      "title": "감만2동 제3공영주차장 석면해체공사 폐기물처리용역",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 5244000,
+      "vendor": "(주)덕산산업",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-26T00:26:57.000Z",
+      "updatedAt": "2026-04-26T00:26:57.000Z"
+    },
+    {
+      "id": 60007,
+      "fiscalYear": "2026",
+      "execDate": "2026-01-30",
+      "date": "2026-01-30",
+      "budgetId": 30003,
+      "budgetPartId": null,
+      "projectId": 30010,
+      "title": "감만2동 제3공영주차장 석면해체공사",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 16276000,
+      "vendor": "신창건영(주)",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-26T00:28:13.000Z",
+      "updatedAt": "2026-04-26T00:28:13.000Z"
+    },
+    {
+      "id": 60008,
+      "fiscalYear": "2026",
+      "execDate": "2026-01-28",
+      "date": "2026-01-28",
+      "budgetId": 30003,
+      "budgetPartId": null,
+      "projectId": 30015,
+      "title": "감만2동 제3공영주차장 조성공사 건축물 해체계획서 작성용역",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 9700000,
+      "vendor": "아키시스건축사사무",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-26T00:29:23.000Z",
+      "updatedAt": "2026-04-26T00:29:23.000Z"
+    },
+    {
+      "id": 60009,
+      "fiscalYear": "2026",
+      "execDate": "2026-03-25",
+      "date": "2026-03-25",
+      "budgetId": 30001,
+      "budgetPartId": null,
+      "projectId": 30002,
+      "title": "못골시장 일원 보행환경개선사업 효과평가용역 선금",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 9490000,
+      "vendor": "(주)경성",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "선금",
+      "createdAt": "2026-04-26T00:33:39.000Z",
+      "updatedAt": "2026-04-26T00:33:39.000Z"
+    },
+    {
+      "id": 60010,
+      "fiscalYear": "2026",
+      "execDate": "2026-04-03",
+      "date": "2026-04-03",
+      "budgetId": 30002,
+      "budgetPartId": null,
+      "projectId": 30005,
+      "title": "문현4동 구거복개지 공영주차장 건축물해체계획서 작성 및 석면조사용역 준공금",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 2508000,
+      "vendor": "맥이엔지건축사사무소",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "",
+      "createdAt": "2026-04-26T00:35:10.000Z",
+      "updatedAt": "2026-04-26T00:35:10.000Z"
+    },
+    {
+      "id": 60011,
+      "fiscalYear": "2026",
+      "execDate": "2026-03-17",
+      "date": "2026-03-17",
+      "budgetId": 30007,
+      "budgetPartId": null,
+      "projectId": 30017,
+      "title": "2026년 교통체계 개선공사 실시설계용역 선금",
+      "type": "지출",
+      "execType": "지출",
+      "status": "지출",
+      "amount": 10435000,
+      "vendor": "(주)하나기술단",
+      "payee": null,
+      "source": null,
+      "carryover": "당초",
+      "memo": "선금",
+      "createdAt": "2026-04-26T00:47:06.000Z",
+      "updatedAt": "2026-04-26T00:47:06.000Z"
+    }
+  ],
+  "schedules": [
+    {
+      "id": 1,
+      "date": "2026-04-30",
+      "startDate": "2026-04-30",
+      "endDate": "2026-04-29",
+      "startTime": "21:30",
+      "endTime": "",
+      "title": "문현4동 구거복개지 설계변경 관련 설계사,시공사 미팅",
+      "category": "기타",
+      "type": "회의",
+      "location": "문현동 구거복개지",
+      "color": "blue",
+      "projectId": 30003,
+      "memo": "김철민이사님, 전창훈 소장님 현장확인 ",
+      "createdAt": "2026-04-28T05:26:09.000Z",
+      "updatedAt": "2026-04-28T05:26:23.000Z"
+    },
+    {
+      "id": 2,
+      "date": "2026-04-29",
+      "startDate": "2026-04-29",
+      "endDate": "2026-04-29",
+      "startTime": "14:00",
+      "endTime": "",
+      "title": "우암동 도시숲 공영주차장 설계안전성검토 관련 회의",
+      "category": "기타",
+      "type": "회의",
+      "location": "사무실",
+      "color": "blue",
+      "projectId": 30013,
+      "memo": "김병용상무님 방문",
+      "createdAt": "2026-04-28T05:27:11.000Z",
+      "updatedAt": "2026-04-28T05:27:11.000Z"
+    },
+    {
+      "id": 3,
+      "date": "2026-04-29",
+      "startDate": "2026-04-29",
+      "endDate": "2026-04-29",
+      "startTime": "10:00",
+      "endTime": "",
+      "title": "오륙도 수변공원 현장방문",
+      "category": "기타",
+      "type": "현장방문",
+      "location": "오륙도 수변공원",
+      "color": "blue",
+      "projectId": null,
+      "memo": "박수정주무님 같이 방문",
+      "createdAt": "2026-04-28T05:27:49.000Z",
+      "updatedAt": "2026-04-28T05:27:49.000Z"
+    },
+    {
+      "id": 30001,
+      "date": "2026-04-29",
+      "startDate": "2026-04-29",
+      "endDate": "2026-04-29",
+      "startTime": "11:00",
+      "endTime": "",
+      "title": "문현4동 구거복개지 현장방문",
+      "category": "기타",
+      "type": "현장방문",
+      "location": "문현동 838",
+      "color": "blue",
+      "projectId": 30003,
+      "memo": "",
+      "createdAt": "2026-04-28T06:13:57.000Z",
+      "updatedAt": "2026-04-28T06:13:57.000Z"
+    },
+    {
+      "id": 30002,
+      "date": "2026-05-04",
+      "startDate": "2026-05-04",
+      "endDate": "2026-05-04",
+      "startTime": "10:00",
+      "endTime": "",
+      "title": "오륙도 수변공원 공영주차장 차선도색",
+      "category": "기타",
+      "type": "현장방문",
+      "location": "오륙도 수변공원",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-04-28T06:17:34.000Z",
+      "updatedAt": "2026-04-28T06:17:34.000Z"
+    },
+    {
+      "id": 60001,
+      "date": "2026-05-03",
+      "startDate": "2026-05-03",
+      "endDate": "2026-05-03",
+      "startTime": "11:00",
+      "endTime": "12:00",
+      "title": "한상우주사 결혼식",
+      "category": "기타",
+      "type": "기타",
+      "location": "센텀사이언스파크 웨딩홀 1층 라움홀",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-04-29T06:44:37.000Z",
+      "updatedAt": "2026-04-29T06:44:37.000Z"
+    },
+    {
+      "id": 90002,
+      "date": "2026-05-06",
+      "startDate": "2026-05-06",
+      "endDate": "2026-05-06",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "title": "오륙도 수변공원 현장방문(일자리경제과)",
+      "category": "기타",
+      "type": "현장방문",
+      "location": "오륙도 수변공원(이운초)",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-04T08:56:49.000Z",
+      "updatedAt": "2026-05-04T08:56:49.000Z"
+    },
+    {
+      "id": 90003,
+      "date": "2026-05-06",
+      "startDate": "2026-05-06",
+      "endDate": "2026-05-06",
+      "startTime": "00:00",
+      "endTime": "13:00",
+      "title": "점심",
+      "category": "기타",
+      "type": "기타",
+      "location": "더맛",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-04T08:57:21.000Z",
+      "updatedAt": "2026-05-04T08:57:21.000Z"
+    },
+    {
+      "id": 120001,
+      "date": "2026-05-08",
+      "startDate": "2026-05-08",
+      "endDate": "2026-05-08",
+      "startTime": "",
+      "endTime": "",
+      "title": "준공검사(허명환)",
+      "category": "기타",
+      "type": "현장방문",
+      "location": "",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-06T02:18:01.000Z",
+      "updatedAt": "2026-05-06T02:18:01.000Z"
+    },
+    {
+      "id": 150001,
+      "date": "2026-05-11",
+      "startDate": "2026-05-11",
+      "endDate": "2026-05-11",
+      "startTime": "13:50",
+      "endTime": "15:00",
+      "title": "안전한국훈련",
+      "category": "기타",
+      "type": "회의",
+      "location": "한국안전훈련(5층 대회의실)",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-10T08:52:50.000Z",
+      "updatedAt": "2026-05-10T08:52:50.000Z"
+    },
+    {
+      "id": 180001,
+      "date": "2026-05-13",
+      "startDate": "2026-05-13",
+      "endDate": "2026-05-13",
+      "startTime": "",
+      "endTime": "",
+      "title": "점심(남정)",
+      "category": "기타",
+      "type": "회의",
+      "location": "삼계탕",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-12T04:05:25.000Z",
+      "updatedAt": "2026-05-12T04:05:25.000Z"
+    },
+    {
+      "id": 180002,
+      "date": "2026-05-20",
+      "startDate": "2026-05-20",
+      "endDate": "2026-05-20",
+      "startTime": "",
+      "endTime": "",
+      "title": "점심(한국칼라콘크리트)",
+      "category": "기타",
+      "type": "회의",
+      "location": "",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-12T04:05:37.000Z",
+      "updatedAt": "2026-05-12T04:05:37.000Z"
+    },
+    {
+      "id": 210001,
+      "date": "2026-05-22",
+      "startDate": "2026-05-22",
+      "endDate": "2026-05-22",
+      "startTime": "15:30",
+      "endTime": "16:00",
+      "title": "교통시설 투자사업 건의지 합동점검 ",
+      "category": "기타",
+      "type": "회의",
+      "location": "문현로 20",
+      "color": "blue",
+      "projectId": null,
+      "memo": "문현로 20 일원 교차로 교통체계 개선",
+      "createdAt": "2026-05-12T04:45:36.000Z",
+      "updatedAt": "2026-05-19T00:05:24.000Z"
+    },
+    {
+      "id": 210002,
+      "date": "2026-05-21",
+      "startDate": "2026-05-21",
+      "endDate": "2026-05-21",
+      "startTime": "",
+      "endTime": "",
+      "title": "고유가 지원금 지원근무(용호1동)",
+      "category": "기타",
+      "type": "회의",
+      "location": "",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-12T04:45:55.000Z",
+      "updatedAt": "2026-05-12T04:45:55.000Z"
+    },
+    {
+      "id": 240001,
+      "date": "2026-05-14",
+      "startDate": "2026-05-14",
+      "endDate": "2026-05-14",
+      "startTime": "",
+      "endTime": "",
+      "title": "로프웨이 2단계 ",
+      "category": "기타",
+      "type": "회의",
+      "location": "",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-12T11:51:13.000Z",
+      "updatedAt": "2026-05-12T11:51:13.000Z"
+    },
+    {
+      "id": 240002,
+      "date": "2026-05-14",
+      "startDate": "2026-05-14",
+      "endDate": "2026-05-14",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "title": "지속가능한 발전교육",
+      "category": "기타",
+      "type": "회의",
+      "location": "1층 대강당",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-12T11:51:40.000Z",
+      "updatedAt": "2026-05-12T11:51:40.000Z"
+    },
+    {
+      "id": 300001,
+      "date": "2026-05-14",
+      "startDate": "2026-05-14",
+      "endDate": "2026-05-14",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "title": "우암7구역",
+      "category": "기타",
+      "type": "회의",
+      "location": "",
+      "color": "blue",
+      "projectId": null,
+      "memo": "",
+      "createdAt": "2026-05-13T01:23:00.000Z",
+      "updatedAt": "2026-05-13T01:23:00.000Z"
+    },
+    {
+      "id": 330001,
+      "date": "2026-05-15",
+      "startDate": "2026-05-15",
+      "endDate": "2026-05-15",
+      "startTime": "",
+      "endTime": "",
+      "title": "용호B구역 협의 ",
+      "category": "기타",
+      "type": "회의",
+      "location": "",
+      "color": "blue",
+      "projectId": null,
+      "memo": "삼영기술 이근호대리 051-811-8938",
+      "createdAt": "2026-05-13T05:16:09.000Z",
+      "updatedAt": "2026-05-13T05:16:09.000Z"
+    }
+  ],
+  "todoCards": [
+    {
+      "id": 1,
+      "title": "4월 5주차(4.27. ~ 4.30.)",
+      "displayOrder": 1,
+      "isCollapsed": true,
+      "createdAt": "2026-04-25T21:25:08.000Z"
+    },
+    {
+      "id": 60001,
+      "title": "개인적으로 해야할 일 ",
+      "displayOrder": 3,
+      "isCollapsed": true,
+      "createdAt": "2026-04-29T06:32:59.000Z"
+    },
+    {
+      "id": 120001,
+      "title": "5월 1주차(5.4. ~ 5.8.)",
+      "displayOrder": 4,
+      "isCollapsed": true,
+      "createdAt": "2026-04-30T04:01:20.000Z"
+    },
+    {
+      "id": 180001,
+      "title": "5월 2추자(2026.5.11. ~ 5.15.)",
+      "displayOrder": 5,
+      "isCollapsed": true,
+      "createdAt": "2026-05-10T08:41:41.000Z"
+    },
+    {
+      "id": 210001,
+      "title": "새 카드",
+      "displayOrder": 6,
+      "isCollapsed": false,
+      "createdAt": "2026-05-18T12:01:25.000Z"
+    }
+  ],
+  "todoSections": [
+    {
+      "id": 1,
+      "cardId": 1,
+      "title": "우암동 도시숲 공영주차장",
+      "displayOrder": 0,
+      "createdAt": "2026-04-25T21:25:08.000Z"
+    },
+    {
+      "id": 30001,
+      "cardId": 1,
+      "title": "감만2동 제3공영주차장 조성공사",
+      "displayOrder": 1,
+      "createdAt": "2026-04-25T22:53:35.000Z"
+    },
+    {
+      "id": 30002,
+      "cardId": 1,
+      "title": "2026년 교통체계 개선사업",
+      "displayOrder": 2,
+      "createdAt": "2026-04-25T22:53:55.000Z"
+    },
+    {
+      "id": 30003,
+      "cardId": 1,
+      "title": "오륙도 수변공원 임시공영주차장 ",
+      "displayOrder": 3,
+      "createdAt": "2026-04-25T22:53:56.000Z"
+    },
+    {
+      "id": 30004,
+      "cardId": 1,
+      "title": "문현4동 구거복개지 주거지",
+      "displayOrder": 4,
+      "createdAt": "2026-04-25T22:53:57.000Z"
+    },
+    {
+      "id": 60001,
+      "cardId": 1,
+      "title": "소제목",
+      "displayOrder": 5,
+      "createdAt": "2026-04-26T08:27:25.000Z"
+    },
+    {
+      "id": 120001,
+      "cardId": 1,
+      "title": "선람",
+      "displayOrder": 6,
+      "createdAt": "2026-04-28T05:57:28.000Z"
+    },
+    {
+      "id": 150001,
+      "cardId": 60001,
+      "title": "가정일",
+      "displayOrder": 0,
+      "createdAt": "2026-04-29T06:32:59.000Z"
+    },
+    {
+      "id": 150002,
+      "cardId": 60001,
+      "title": "회식일정",
+      "displayOrder": 1,
+      "createdAt": "2026-04-29T06:33:28.000Z"
+    },
+    {
+      "id": 210001,
+      "cardId": 120001,
+      "title": "기타 해야할 일",
+      "displayOrder": 0,
+      "createdAt": "2026-04-30T04:01:20.000Z"
+    },
+    {
+      "id": 240002,
+      "cardId": 120001,
+      "title": "우암동 도시숲 공영주차장 조성공사",
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:21:32.000Z"
+    },
+    {
+      "id": 240003,
+      "cardId": 120001,
+      "title": "문현4동 구거복개지 주거지주차장 조성공사",
+      "displayOrder": 2,
+      "createdAt": "2026-05-06T00:21:44.000Z"
+    },
+    {
+      "id": 240004,
+      "cardId": 120001,
+      "title": "오륙도 수변공원 공영주차장 정비공사",
+      "displayOrder": 3,
+      "createdAt": "2026-05-06T00:21:58.000Z"
+    },
+    {
+      "id": 240005,
+      "cardId": 120001,
+      "title": "감만2동 제3공영주차장 조성공사",
+      "displayOrder": 4,
+      "createdAt": "2026-05-06T00:22:13.000Z"
+    },
+    {
+      "id": 240006,
+      "cardId": 120001,
+      "title": "2026년 교통체계 개선사업 ",
+      "displayOrder": 5,
+      "createdAt": "2026-05-06T00:22:27.000Z"
+    },
+    {
+      "id": 240007,
+      "cardId": 120001,
+      "title": "선람받아야할 사항",
+      "displayOrder": 6,
+      "createdAt": "2026-05-06T00:22:58.000Z"
+    },
+    {
+      "id": 270001,
+      "cardId": 120001,
+      "title": "협의관련",
+      "displayOrder": 7,
+      "createdAt": "2026-05-06T04:06:46.000Z"
+    },
+    {
+      "id": 300001,
+      "cardId": 180001,
+      "title": "기타 해야할 일 ",
+      "displayOrder": 0,
+      "createdAt": "2026-05-10T08:41:41.000Z"
+    },
+    {
+      "id": 300004,
+      "cardId": 180001,
+      "title": "못골시장 일원 보행환경개선사업 효과평가용역",
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T08:56:09.000Z"
+    },
+    {
+      "id": 330001,
+      "cardId": 180001,
+      "title": "감만2동 제3공영주차장 조성공사",
+      "displayOrder": 2,
+      "createdAt": "2026-05-10T09:07:18.000Z"
+    },
+    {
+      "id": 330002,
+      "cardId": 180001,
+      "title": "우암동 도시숲 공영주차장 조성공사",
+      "displayOrder": 3,
+      "createdAt": "2026-05-10T09:07:48.000Z"
+    },
+    {
+      "id": 330003,
+      "cardId": 180001,
+      "title": "문현동 구거복개지 공영주차장 조성공사",
+      "displayOrder": 4,
+      "createdAt": "2026-05-10T09:08:32.000Z"
+    },
+    {
+      "id": 330004,
+      "cardId": 180001,
+      "title": "2026년 교통체계 개선공사 실시설계용역",
+      "displayOrder": 5,
+      "createdAt": "2026-05-10T09:09:17.000Z"
+    },
+    {
+      "id": 330005,
+      "cardId": 180001,
+      "title": "교통협의",
+      "displayOrder": 6,
+      "createdAt": "2026-05-10T09:09:35.000Z"
+    },
+    {
+      "id": 360001,
+      "cardId": 210001,
+      "title": "해야할 일 ",
+      "displayOrder": 0,
+      "createdAt": "2026-05-18T12:01:25.000Z"
+    }
+  ],
+  "todoItems": [
+    {
+      "id": 1,
+      "sectionId": 1,
+      "content": "설계안전성 검토관련 일정협의",
+      "done": false,
+      "displayOrder": 1,
+      "createdAt": "2026-04-25T22:55:14.000Z"
+    },
+    {
+      "id": 2,
+      "sectionId": 30001,
+      "content": "주간공종보고",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-25T22:55:27.000Z"
+    },
+    {
+      "id": 3,
+      "sectionId": 30001,
+      "content": "하도급 관련 사실확인",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-25T22:55:51.000Z"
+    },
+    {
+      "id": 4,
+      "sectionId": 30002,
+      "content": "관련부서 협의추진",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-25T22:56:10.000Z"
+    },
+    {
+      "id": 5,
+      "sectionId": 30003,
+      "content": "흙콘크리트 준비",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-25T22:56:21.000Z"
+    },
+    {
+      "id": 6,
+      "sectionId": 30001,
+      "content": "지반조사용역 준공계 접수",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-04-26T00:38:08.000Z"
+    },
+    {
+      "id": 7,
+      "sectionId": 30001,
+      "content": "지반조사용역 조사보고서 감리단 송부",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-04-26T00:38:28.000Z"
+    },
+    {
+      "id": 8,
+      "sectionId": 30004,
+      "content": "실정보고 준비",
+      "done": false,
+      "displayOrder": 1,
+      "createdAt": "2026-04-26T00:38:40.000Z"
+    },
+    {
+      "id": 30001,
+      "sectionId": 60001,
+      "content": "우암1구역 교통영향평가 10시~10시30분 방문예정",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-26T08:27:45.000Z"
+    },
+    {
+      "id": 60001,
+      "sectionId": 30003,
+      "content": "관급자재 지출품의등록",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-26T23:02:50.000Z"
+    },
+    {
+      "id": 60002,
+      "sectionId": 60001,
+      "content": "지자체 발주공사 공정현황 제출",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-26T23:03:13.000Z"
+    },
+    {
+      "id": 90001,
+      "sectionId": 30004,
+      "content": "현장방문",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-27T00:25:36.000Z"
+    },
+    {
+      "id": 90002,
+      "sectionId": 60001,
+      "content": "용호B구역 회신",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-04-27T00:25:52.000Z"
+    },
+    {
+      "id": 120001,
+      "sectionId": 30002,
+      "content": "협의공문 용역사 주기",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-27T00:55:29.000Z"
+    },
+    {
+      "id": 150001,
+      "sectionId": 30003,
+      "content": "Ai 파일 보내기",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-04-27T04:08:25.000Z"
+    },
+    {
+      "id": 180001,
+      "sectionId": 30001,
+      "content": "하도급계약체결 사실확인 조회 공문 송부",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-04-27T08:34:41.000Z"
+    },
+    {
+      "id": 210001,
+      "sectionId": 30003,
+      "content": "4/28 아스콘 작업",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-04-27T12:39:52.000Z"
+    },
+    {
+      "id": 210002,
+      "sectionId": 60001,
+      "content": "문현동 821 관련 교통개선대책 협의 회신",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-04-27T12:40:34.000Z"
+    },
+    {
+      "id": 210003,
+      "sectionId": 60001,
+      "content": "문현동 821 관련 주택건설사업 승인 회신",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-04-27T12:41:34.000Z"
+    },
+    {
+      "id": 240001,
+      "sectionId": 60001,
+      "content": "주간업무보고자료(국장님)",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-04-27T22:34:14.000Z"
+    },
+    {
+      "id": 240002,
+      "sectionId": 30004,
+      "content": "깨기부분 정리",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-04-27T22:34:21.000Z"
+    },
+    {
+      "id": 270001,
+      "sectionId": 30003,
+      "content": "4/29 현장확인 (10시 수정주무님)",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-04-28T04:35:25.000Z"
+    },
+    {
+      "id": 300001,
+      "sectionId": 1,
+      "content": "4/29(수) 관보종합기술단 회의 (14시)",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-28T04:51:35.000Z"
+    },
+    {
+      "id": 300002,
+      "sectionId": 1,
+      "content": "CSI 정보입력",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-04-28T04:51:43.000Z"
+    },
+    {
+      "id": 330001,
+      "sectionId": 120001,
+      "content": "지반조사용역 완료계",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-28T05:57:54.000Z"
+    },
+    {
+      "id": 330002,
+      "sectionId": 120001,
+      "content": "감만2동 제3공영주차장 하도급 2건",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-04-28T05:58:06.000Z"
+    },
+    {
+      "id": 330003,
+      "sectionId": 30001,
+      "content": "하도급계약체결 관련 공문 등기",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-04-28T05:58:36.000Z"
+    },
+    {
+      "id": 360001,
+      "sectionId": 30001,
+      "content": "지반조사보고서 준공검사조서 제출",
+      "done": true,
+      "displayOrder": 7,
+      "createdAt": "2026-04-28T06:23:35.000Z"
+    },
+    {
+      "id": 450001,
+      "sectionId": 30004,
+      "content": "2026.4.30.(목) 현장확인",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-04-29T06:32:34.000Z"
+    },
+    {
+      "id": 450002,
+      "sectionId": 150001,
+      "content": "엄마 전화(블루링크)",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-29T06:33:22.000Z"
+    },
+    {
+      "id": 450003,
+      "sectionId": 150001,
+      "content": "어버이날",
+      "done": false,
+      "displayOrder": 2,
+      "createdAt": "2026-04-29T06:33:26.000Z"
+    },
+    {
+      "id": 450004,
+      "sectionId": 150002,
+      "content": "2026. 4. 30.(목) 회식 -현수햄",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-04-29T06:33:46.000Z"
+    },
+    {
+      "id": 450005,
+      "sectionId": 150002,
+      "content": "2026.5.16.(토) 등산",
+      "done": false,
+      "displayOrder": 2,
+      "createdAt": "2026-04-29T06:34:00.000Z"
+    },
+    {
+      "id": 480001,
+      "sectionId": 60001,
+      "content": "출장(태준주사님)",
+      "done": true,
+      "displayOrder": 7,
+      "createdAt": "2026-04-30T00:27:07.000Z"
+    },
+    {
+      "id": 510001,
+      "sectionId": 30001,
+      "content": "수안종합건설 회신공문",
+      "done": false,
+      "displayOrder": 8,
+      "createdAt": "2026-04-30T08:21:44.000Z"
+    },
+    {
+      "id": 540001,
+      "sectionId": 60001,
+      "content": "국내선진지 체험일정 변경",
+      "done": true,
+      "displayOrder": 8,
+      "createdAt": "2026-05-03T23:57:14.000Z"
+    },
+    {
+      "id": 540002,
+      "sectionId": 30003,
+      "content": "5/4 오륙도 수변공원 현장방문",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-05-04T00:03:41.000Z"
+    },
+    {
+      "id": 570001,
+      "sectionId": 60001,
+      "content": "용호동 197번길 행위허가 회신",
+      "done": true,
+      "displayOrder": 9,
+      "createdAt": "2026-05-04T04:12:51.000Z"
+    },
+    {
+      "id": 600001,
+      "sectionId": 30002,
+      "content": "2026년 교통체계 개선사업 추진현황 제출(시 교통혁신과)",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-05-04T05:32:12.000Z"
+    },
+    {
+      "id": 630001,
+      "sectionId": 210001,
+      "content": "공공갈등교육",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:21:18.000Z"
+    },
+    {
+      "id": 630002,
+      "sectionId": 210001,
+      "content": "주민참여예산",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-06T00:21:24.000Z"
+    },
+    {
+      "id": 630003,
+      "sectionId": 240002,
+      "content": "공사비 증감내역 확인",
+      "done": false,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:23:16.000Z"
+    },
+    {
+      "id": 630004,
+      "sectionId": 240002,
+      "content": "설계안전성검토 의뢰",
+      "done": false,
+      "displayOrder": 2,
+      "createdAt": "2026-05-06T00:23:27.000Z"
+    },
+    {
+      "id": 630005,
+      "sectionId": 240004,
+      "content": "준공계 접수(5/6)",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:23:39.000Z"
+    },
+    {
+      "id": 630006,
+      "sectionId": 240004,
+      "content": "난간설치 확인",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-06T00:25:03.000Z"
+    },
+    {
+      "id": 630007,
+      "sectionId": 240004,
+      "content": "물품검사 검수확인서(볼라드)",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-05-06T00:25:19.000Z"
+    },
+    {
+      "id": 630008,
+      "sectionId": 240003,
+      "content": "용역사 일정확인",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:25:28.000Z"
+    },
+    {
+      "id": 630009,
+      "sectionId": 240003,
+      "content": "실정보고",
+      "done": false,
+      "displayOrder": 2,
+      "createdAt": "2026-05-06T00:25:34.000Z"
+    },
+    {
+      "id": 630010,
+      "sectionId": 240005,
+      "content": "하도급 사실관계확인 회신(5/7)",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:25:46.000Z"
+    },
+    {
+      "id": 630011,
+      "sectionId": 240006,
+      "content": "교통체계 의견협의(5/7)",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T00:26:07.000Z"
+    },
+    {
+      "id": 630012,
+      "sectionId": 210001,
+      "content": "단가계약 작업지시 물량",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-05-06T00:28:36.000Z"
+    },
+    {
+      "id": 630013,
+      "sectionId": 240004,
+      "content": "현장방문(2026.5.6. 오후2시 -일자리경제과)",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-05-06T00:33:16.000Z"
+    },
+    {
+      "id": 660001,
+      "sectionId": 270001,
+      "content": "문현제일지역주택(5.6. 16시)",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T04:07:56.000Z"
+    },
+    {
+      "id": 660002,
+      "sectionId": 240007,
+      "content": "준공계[오륙도 수변공원 공영주차장 정비공사]",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-06T04:12:40.000Z"
+    },
+    {
+      "id": 660003,
+      "sectionId": 240003,
+      "content": "변경설계서 초안(김철민 이사 2026.5.7. 오전까지)",
+      "done": false,
+      "displayOrder": 3,
+      "createdAt": "2026-05-06T04:20:35.000Z"
+    },
+    {
+      "id": 660004,
+      "sectionId": 240004,
+      "content": "난간설치 예정일(2026.5.7.)",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-05-06T04:20:51.000Z"
+    },
+    {
+      "id": 690001,
+      "sectionId": 210001,
+      "content": "정보공개청구 관련(김영희 주사님 (4592))",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-05-06T06:11:06.000Z"
+    },
+    {
+      "id": 690002,
+      "sectionId": 210001,
+      "content": "주간업무보고",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-05-06T06:12:54.000Z"
+    },
+    {
+      "id": 690003,
+      "sectionId": 240004,
+      "content": "물품검사 검수확인서(흙콘크리트)",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-05-06T06:18:15.000Z"
+    },
+    {
+      "id": 720001,
+      "sectionId": 270001,
+      "content": "문현동 295-1번지 일원 회신",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-07T00:36:26.000Z"
+    },
+    {
+      "id": 750001,
+      "sectionId": 240004,
+      "content": "준공검사",
+      "done": true,
+      "displayOrder": 7,
+      "createdAt": "2026-05-07T09:04:18.000Z"
+    },
+    {
+      "id": 750002,
+      "sectionId": 210001,
+      "content": "한국훈련 참가",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-05-07T09:04:53.000Z"
+    },
+    {
+      "id": 750003,
+      "sectionId": 210001,
+      "content": "민원사무 처리실태 감사 수감자료",
+      "done": true,
+      "displayOrder": 7,
+      "createdAt": "2026-05-07T09:05:07.000Z"
+    },
+    {
+      "id": 750004,
+      "sectionId": 240003,
+      "content": "하수팀 의견조회",
+      "done": false,
+      "displayOrder": 4,
+      "createdAt": "2026-05-07T09:05:21.000Z"
+    },
+    {
+      "id": 750005,
+      "sectionId": 240006,
+      "content": "의견협의 결과 알림",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-07T09:06:46.000Z"
+    },
+    {
+      "id": 780001,
+      "sectionId": 300001,
+      "content": "26.5.11. (월) 13시 50분 5층 대회의실(안전한국훈련)",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T08:52:14.000Z"
+    },
+    {
+      "id": 780002,
+      "sectionId": 300001,
+      "content": "회계연도 결산 제안설명서 및 집행잔액사유서(기한: 26.5.15.(금))",
+      "done": false,
+      "displayOrder": 2,
+      "createdAt": "2026-05-10T08:54:43.000Z"
+    },
+    {
+      "id": 810001,
+      "sectionId": 300004,
+      "content": "보고서 확인",
+      "done": false,
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T09:06:59.000Z"
+    },
+    {
+      "id": 810002,
+      "sectionId": 300001,
+      "content": "등산코스",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-05-10T09:07:10.000Z"
+    },
+    {
+      "id": 810003,
+      "sectionId": 300001,
+      "content": "한마음 일정 확인",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-05-10T09:07:17.000Z"
+    },
+    {
+      "id": 810004,
+      "sectionId": 330001,
+      "content": "26.5.15.(금) 보고서 제출예정",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T09:07:45.000Z"
+    },
+    {
+      "id": 810005,
+      "sectionId": 330002,
+      "content": "설계안전성검토 의뢰",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T09:08:02.000Z"
+    },
+    {
+      "id": 810006,
+      "sectionId": 330002,
+      "content": "공사비 보고",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-10T09:08:06.000Z"
+    },
+    {
+      "id": 810007,
+      "sectionId": 330003,
+      "content": "하수팀 의견협의",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T09:08:51.000Z"
+    },
+    {
+      "id": 810008,
+      "sectionId": 300001,
+      "content": "국민신문고",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-05-10T09:08:58.000Z"
+    },
+    {
+      "id": 810009,
+      "sectionId": 330003,
+      "content": "실정보고",
+      "done": false,
+      "displayOrder": 2,
+      "createdAt": "2026-05-10T09:09:03.000Z"
+    },
+    {
+      "id": 810010,
+      "sectionId": 330004,
+      "content": "용역완료일 확인",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-10T09:09:33.000Z"
+    },
+    {
+      "id": 840001,
+      "sectionId": 330005,
+      "content": "용호 11구역 협의의견 받기",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-11T00:11:41.000Z"
+    },
+    {
+      "id": 870001,
+      "sectionId": 300001,
+      "content": "자금배정",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-05-11T08:45:55.000Z"
+    },
+    {
+      "id": 900001,
+      "sectionId": 300001,
+      "content": "민원사무 처리실태 감사 수감자료",
+      "done": true,
+      "displayOrder": 7,
+      "createdAt": "2026-05-11T11:16:24.000Z"
+    },
+    {
+      "id": 930001,
+      "sectionId": 300001,
+      "content": "호우 강풍대비 철저공문 생성",
+      "done": true,
+      "displayOrder": 8,
+      "createdAt": "2026-05-12T00:31:23.000Z"
+    },
+    {
+      "id": 960001,
+      "sectionId": 330001,
+      "content": "국장님 보고서 작성",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-12T06:29:38.000Z"
+    },
+    {
+      "id": 990001,
+      "sectionId": 300001,
+      "content": "업추비 결재",
+      "done": true,
+      "displayOrder": 9,
+      "createdAt": "2026-05-13T23:59:00.000Z"
+    },
+    {
+      "id": 990002,
+      "sectionId": 330005,
+      "content": "용호 11구역 회신",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-13T23:59:16.000Z"
+    },
+    {
+      "id": 1020001,
+      "sectionId": 300001,
+      "content": "우암7구역 협의",
+      "done": true,
+      "displayOrder": 10,
+      "createdAt": "2026-05-14T01:21:37.000Z"
+    },
+    {
+      "id": 1050001,
+      "sectionId": 360001,
+      "content": "결산",
+      "done": true,
+      "displayOrder": 1,
+      "createdAt": "2026-05-18T12:01:54.000Z"
+    },
+    {
+      "id": 1050002,
+      "sectionId": 360001,
+      "content": "감사자료 제출",
+      "done": true,
+      "displayOrder": 2,
+      "createdAt": "2026-05-18T12:01:59.000Z"
+    },
+    {
+      "id": 1050003,
+      "sectionId": 360001,
+      "content": "시 교통혁신과 현장점검",
+      "done": true,
+      "displayOrder": 3,
+      "createdAt": "2026-05-18T12:02:12.000Z"
+    },
+    {
+      "id": 1050004,
+      "sectionId": 360001,
+      "content": "못골시장 현장확인",
+      "done": true,
+      "displayOrder": 4,
+      "createdAt": "2026-05-18T12:02:44.000Z"
+    },
+    {
+      "id": 1050005,
+      "sectionId": 360001,
+      "content": "못골시장 효과평가용역",
+      "done": true,
+      "displayOrder": 5,
+      "createdAt": "2026-05-18T12:02:55.000Z"
+    },
+    {
+      "id": 1050006,
+      "sectionId": 360001,
+      "content": "국민신문고 회신",
+      "done": true,
+      "displayOrder": 6,
+      "createdAt": "2026-05-18T12:04:27.000Z"
+    },
+    {
+      "id": 1080001,
+      "sectionId": 360001,
+      "content": "일방통행 지정",
+      "done": true,
+      "displayOrder": 7,
+      "createdAt": "2026-05-19T00:02:33.000Z"
+    },
+    {
+      "id": 1110001,
+      "sectionId": 360001,
+      "content": "주요업무 추진현황 제출",
+      "done": true,
+      "displayOrder": 8,
+      "createdAt": "2026-05-19T05:13:37.000Z"
+    }
+  ],
+  "files": [],
+  "contacts": [
+    {
+      "id": 1,
+      "type": "협의기관",
+      "name": "(주)하랑이엔지",
+      "manager": "송민호 이사",
+      "phone": "010-5231-2590",
+      "email": "ssi309@nate.com",
+      "department": "",
+      "note": "교통영향평가(우암2구역)",
+      "createdAt": "2026-04-26T22:52:28.000Z",
+      "updatedAt": "2026-04-26T22:52:28.000Z"
+    },
+    {
+      "id": 2,
+      "type": "협의기관",
+      "name": "정일이앤씨",
+      "manager": "정동원이사",
+      "phone": "010-5017-8194",
+      "email": "",
+      "department": "",
+      "note": "교통영향평가(우암1구역)\n- 정일이앤씨 대표(010-5508-5589)\n- 우암1구역 사무장(010-3468-1641)\n- 우암1구역 이수은과장(633-9133)",
+      "createdAt": "2026-04-26T23:21:51.000Z",
+      "updatedAt": "2026-04-26T23:22:55.000Z"
+    },
+    {
+      "id": 30001,
+      "type": "용역사",
+      "name": "(주)하나기술단",
+      "manager": "김성현 이사",
+      "phone": "010-4011-5832",
+      "email": "cass903@hanmail.net",
+      "department": "",
+      "note": "2026년 교통체계 개선사업 실시설계용역",
+      "createdAt": "2026-04-27T00:56:39.000Z",
+      "updatedAt": "2026-04-27T00:56:55.000Z"
+    },
+    {
+      "id": 60001,
+      "type": "협의기관",
+      "name": "아이에스건축사사무소",
+      "manager": "이미경 과장님",
+      "phone": "051-810-0286",
+      "email": "",
+      "department": "",
+      "note": "",
+      "createdAt": "2026-04-28T06:43:11.000Z",
+      "updatedAt": "2026-04-28T06:43:11.000Z"
+    },
+    {
+      "id": 90001,
+      "type": "협의기관",
+      "name": "버미이앤씨",
+      "manager": "손영재 상무이사",
+      "phone": "010-6592-4000",
+      "email": "bumieng@nate.com",
+      "department": "",
+      "note": "문현동 821\n문현동 295-1",
+      "createdAt": "2026-05-06T07:42:44.000Z",
+      "updatedAt": "2026-05-06T07:42:44.000Z"
+    },
+    {
+      "id": 120001,
+      "type": "협의기관",
+      "name": "유탑이앤씨",
+      "manager": "",
+      "phone": "010-4581-7507",
+      "email": "",
+      "department": "",
+      "note": "용호 11구역",
+      "createdAt": "2026-05-11T00:25:39.000Z",
+      "updatedAt": "2026-05-11T00:25:39.000Z"
+    },
+    {
+      "id": 150001,
+      "type": "기타",
+      "name": "(주)하나이앤에스,",
+      "manager": "김언재이사님",
+      "phone": "010-8221-4444",
+      "email": "",
+      "department": "",
+      "note": "",
+      "createdAt": "2026-05-19T06:07:58.000Z",
+      "updatedAt": "2026-05-19T06:07:58.000Z"
+    },
+    {
+      "id": 150002,
+      "type": "기타",
+      "name": "(주)하나이앤에스,",
+      "manager": "김언재이사님",
+      "phone": "010-8221-4444",
+      "email": "",
+      "department": "",
+      "note": "",
+      "createdAt": "2026-05-19T06:07:58.000Z",
+      "updatedAt": "2026-05-19T06:07:58.000Z"
+    }
+  ],
+  "exportedAt": "2026-05-25T00:19:16.541Z"
+}
